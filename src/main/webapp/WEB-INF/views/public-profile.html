@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${freelancer.fullName} + ' | Talentrock'">Freelancer Profile | Talentrock</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .profile-container {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .profile-header {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar-large {
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(45deg, #6366f1, #a855f7);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            flex-shrink: 0;
+        }
+
+        .profile-info h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .profile-category {
+            font-size: 1.25rem;
+            color: #6366f1;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .profile-details-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            margin-bottom: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bio-text {
+            line-height: 1.8;
+            color: #475569;
+            font-size: 1.05rem;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 8px 16px;
+            border-radius: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .hire-btn-large {
+            display: block;
+            width: 100%;
+            padding: 1.25rem;
+            background: #2563eb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .hire-btn-large:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+            background: #1d4ed8;
+        }
+
+        nav {
+            background: white;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #6366f1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/" class="logo"><span>⚡</span> Talentrock</a>
+        <div>
+            <a href="/login" class="btn btn-ghost">Login</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <!-- Header Section -->
+        <div class="profile-header">
+            <div class="profile-avatar-large" th:text="${freelancer.fullName.substring(0,1)}">A</div>
+            <div class="profile-info">
+                <h1 th:text="${freelancer.fullName}">Arjun Sharma</h1>
+                <div class="profile-category"
+                    th:text="${freelancer.category != null ? freelancer.category : 'Professional Freelancer'}">Website
+                    Design</div>
+                <div class="profile-meta">
+                    <div class="meta-item">📍 <span th:text="${freelancer.location}">India</span></div>
+                    <div class="meta-item">⭐ <span
+                            th:text="${#numbers.formatDecimal(freelancer.performanceScore, 1, 1)}">4.9</span>
+                        Performance</div>
+                    <div class="meta-item" th:if="${freelancer.isVerified}">🟢 Verified Expert</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-details-grid">
+            <!-- Left Side -->
+            <div class="profile-main">
+                <div class="profile-card">
+                    <h2 class="card-title">📖 About Me</h2>
+                    <p class="bio-text" th:text="${freelancer.bio}">Professional freelancer with extensive experience...
+                    </p>
+                </div>
+
+                <div class="profile-card">
+                    <h2 class="card-title">🛠️ Skills & Specialties</h2>
+                    <div class="skills-container">
+                        <span th:each="skill : ${freelancer.skills.split(',')}" class="skill-tag"
+                            th:text="${skill.trim()}">React</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side (Stats Card) -->
+            <div class="profile-sidebar">
+                <div class="profile-card">
+                    <h2 class="card-title">💰 Pricing & Stats</h2>
+
+                    <div class="stat-row">
+                        <span class="stat-label">Hourly Rate</span>
+                        <span class="stat-value" style="color:#2563eb; font-size:1.2rem;">₹<span
+                                th:text="${#numbers.formatDecimal(freelancer.hourlyRate, 1, 0)}">45</span></span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Projects Completed</span>
+                        <span class="stat-value" th:text="${freelancer.completedProjects}">42</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Availability</span>
+                        <span class="stat-value" style="color:#10b981;">Full Time</span>
+                    </div>
+
+                    <a href="/register" class="hire-btn-large">Hire This Professional</a>
+                    <p style="text-align:center; color:#94a3b8; font-size:0.8rem; margin-top:1rem;">Secure payment via
+                        Talentrock Escrow</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

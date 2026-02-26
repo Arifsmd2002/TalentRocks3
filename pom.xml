@@ -12,8 +12,8 @@
 	<artifactId>project2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>talentrox</name>
-	<description>Talentrox - Merit-Based Freelancing Platform</description>
+	<name>Talentrock</name>
+	<description>Talentrock - Merit-Based Freelancing Platform</description>
 	<url/>
 	<licenses><license/></licenses>
 	<developers><developer/></developers>

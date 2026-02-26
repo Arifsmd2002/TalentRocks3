@@ -35,10 +35,14 @@ public class User {
     private String bio;
 
     private String skills;
+    private String category;
     private String location;
 
     @Column(precision = 10, scale = 2)
     private java.math.BigDecimal walletBalance = java.math.BigDecimal.ZERO;
+
+    @Column(precision = 10, scale = 2)
+    private java.math.BigDecimal hourlyRate = java.math.BigDecimal.ZERO;
 
     private Double performanceScore = 5.0;
 
@@ -232,6 +236,22 @@ public class User {
 
     public void setPostedProjects(List<Project> postedProjects) {
         this.postedProjects = postedProjects;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public java.math.BigDecimal getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public void setHourlyRate(java.math.BigDecimal hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 
     public List<Bid> getBids() {

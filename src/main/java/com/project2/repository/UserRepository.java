@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByRole(Role role);
 
     List<User> findByRoleAndIsActive(Role role, Boolean isActive);
+
+    List<User> findByRoleAndIsActiveAndCategoryContainingIgnoreCase(Role role, Boolean isActive, String category);
 }

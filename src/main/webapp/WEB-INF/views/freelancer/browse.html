@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Browse Projects | Talentrox</title>
+    <title>Browse Projects | Talentrock</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
 </head>
@@ -22,16 +22,87 @@
             <div th:if="${success}" class="alert alert-success">✅ <span th:text="${success}"></span></div>
             <div th:if="${error}" class="alert alert-error">⚠️ <span th:text="${error}"></span></div>
 
-            <!-- Search -->
-            <div class="search-box mb-4" style="max-width:600px;">
-                <form th:action="@{/freelancer/browse}" method="get"
-                    style="display:flex; width:100%; align-items:center; gap:0.5rem;">
-                    <span style="font-size:1.1rem;">🔍</span>
-                    <input type="text" name="keyword" class="form-control"
-                        style="background:transparent;border:none;box-shadow:none;padding:8px 0;" th:value="${keyword}"
-                        placeholder="Search by skill, category, or keyword..." />
-                    <button type="submit" class="btn btn-primary btn-sm">Search</button>
-                </form>
+            <!-- Search & Filter -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form th:action="@{/freelancer/browse}" method="get" class="flex flex-wrap gap-2">
+                        <div class="form-group mb-0 flex-1" style="min-width:300px;">
+                            <input type="text" name="keyword" class="form-control" th:value="${keyword}"
+                                placeholder="Search by skill, title, or keywords..." />
+                        </div>
+                        <div class="form-group mb-0" style="min-width:200px;">
+                            <select name="category" class="form-control">
+                                <option value="">All Categories</option>
+                                <optgroup label="Development & IT">
+                                    <option th:selected="${category == 'Web Development'}">Web Development</option>
+                                    <option th:selected="${category == 'Mobile Apps'}">Mobile Apps</option>
+                                    <option th:selected="${category == 'Android Apps'}">Android Apps</option>
+                                    <option th:selected="${category == 'iPhone Apps'}">iPhone Apps</option>
+                                    <option th:selected="${category == 'Software Architecture'}">Software Architecture
+                                    </option>
+                                    <option th:selected="${category == 'HTML'}">HTML</option>
+                                    <option th:selected="${category == 'CSS'}">CSS</option>
+                                    <option th:selected="${category == 'HTML 5'}">HTML 5</option>
+                                    <option th:selected="${category == 'Javascript'}">Javascript</option>
+                                    <option th:selected="${category == 'Python'}">Python</option>
+                                    <option th:selected="${category == 'PHP'}">PHP</option>
+                                    <option th:selected="${category == 'C++ Programming'}">C++ Programming</option>
+                                    <option th:selected="${category == 'C# Programming'}">C# Programming</option>
+                                    <option th:selected="${category == 'MySQL'}">MySQL</option>
+                                    <option th:selected="${category == 'Wordpress'}">Wordpress</option>
+                                    <option th:selected="${category == 'Data Processing'}">Data Processing</option>
+                                    <option th:selected="${category == 'Web Scraping'}">Web Scraping</option>
+                                    <option th:selected="${category == 'Linux'}">Linux</option>
+                                </optgroup>
+                                <optgroup label="Design & Creative">
+                                    <option th:selected="${category == 'Website Design'}">Website Design</option>
+                                    <option th:selected="${category == 'Graphic Design'}">Graphic Design</option>
+                                    <option th:selected="${category == 'Logo Design'}">Logo Design</option>
+                                    <option th:selected="${category == 'UI/UX Design'}">UI/UX Design</option>
+                                    <option th:selected="${category == 'Banner Design'}">Banner Design</option>
+                                    <option th:selected="${category == 'Illustration'}">Illustration</option>
+                                    <option th:selected="${category == '3D Modelling'}">3D Modelling</option>
+                                    <option th:selected="${category == 'Photoshop'}">Photoshop</option>
+                                    <option th:selected="${category == 'Video Editing'}">Video Editing</option>
+                                </optgroup>
+                                <optgroup label="Writing & Content">
+                                    <option th:selected="${category == 'Content Writing'}">Content Writing</option>
+                                    <option th:selected="${category == 'Article Writing'}">Article Writing</option>
+                                    <option th:selected="${category == 'Research Writing'}">Research Writing</option>
+                                    <option th:selected="${category == 'Copywriting'}">Copywriting</option>
+                                    <option th:selected="${category == 'Ghostwriting'}">Ghostwriting</option>
+                                    <option th:selected="${category == 'Technical Writing'}">Technical Writing</option>
+                                    <option th:selected="${category == 'Blogging'}">Blogging</option>
+                                    <option th:selected="${category == 'Proofreading'}">Proofreading</option>
+                                    <option th:selected="${category == 'Translation'}">Translation</option>
+                                </optgroup>
+                                <optgroup label="Sales & Marketing">
+                                    <option th:selected="${category == 'Digital Marketing'}">Digital Marketing</option>
+                                    <option th:selected="${category == 'Marketing'}">Marketing</option>
+                                    <option th:selected="${category == 'SEO & Analytics'}">SEO & Analytics</option>
+                                    <option th:selected="${category == 'Link Building'}">Link Building</option>
+                                    <option th:selected="${category == 'Internet Marketing'}">Internet Marketing
+                                    </option>
+                                    <option th:selected="${category == 'Public Relations'}">Public Relations</option>
+                                </optgroup>
+                                <optgroup label="Business & Admin">
+                                    <option th:selected="${category == 'Data Entry'}">Data Entry</option>
+                                    <option th:selected="${category == 'Excel'}">Excel</option>
+                                    <option th:selected="${category == 'Accounting'}">Accounting</option>
+                                    <option th:selected="${category == 'Finance'}">Finance</option>
+                                    <option th:selected="${category == 'Legal'}">Legal</option>
+                                    <option th:selected="${category == 'Logistics'}">Logistics</option>
+                                    <option th:selected="${category == 'Research'}">Research</option>
+                                    <option th:selected="${category == 'Web Search'}">Web Search</option>
+                                    <option th:selected="${category == 'Manufacturing'}">Manufacturing</option>
+                                    <option th:selected="${category == 'eCommerce'}">eCommerce</option>
+                                </optgroup>
+                                <option th:selected="${category == 'Other'}">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Filter Results</button>
+                    </form>
+                </div>
             </div>
 
             <!-- Projects Grid -->
@@ -51,7 +122,7 @@
                     </div>
                     <h3 style="font-size:1.1rem; margin-bottom:0.5rem;" th:text="${project.title}">Project Title</h3>
                     <p class="text-secondary-color text-sm mb-3"
-                        style="line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;"
+                        style="line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;"
                         th:text="${project.description}">Description</p>
 
                     <div class="flex flex-wrap gap-1 mb-3" th:if="${project.skillsRequired}">

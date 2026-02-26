@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Hire ' + ${category} + ' | Talentrock'">Hire | Talentrock</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background-color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #1e293b;
+        }
+
+        .hire-header {
+            padding: 4rem 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hire-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: #0f172a;
+        }
+
+        .hire-subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .freelancer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .freelancer-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            border: 1px solid #f1f5f9;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .freelancer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            border-color: #e2e8f0;
+        }
+
+        .freelancer-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            border-radius: 20px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .verify-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .freelancer-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: #1e293b;
+        }
+
+        .freelancer-tagline {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .freelancer-rate {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+
+        .freelancer-rate span {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .freelancer-stats {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .freelancer-jobs {
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .btn-view {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .btn-view:hover {
+            background: #1d4ed8;
+            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 8rem 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        nav {
+            background: white;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e293b;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: #6366f1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/" class="logo"><span>⚡</span> Talentrock</a>
+        <div class="nav-links">
+            <a href="/login" class="btn btn-ghost">Login</a>
+            <a href="/register" class="btn btn-primary">Sign Up</a>
+        </div>
+    </nav>
+
+    <header class="hire-header">
+        <h1 class="hire-title" th:text="'Hire Top ' + ${category} + ' Professionals'">Hire Top Professionals</h1>
+        <p class="hire-subtitle">Connecting you with the world's most talented experts in <span
+                th:text="${category}">Category</span>.</p>
+    </header>
+
+    <div class="freelancer-grid">
+        <!-- Loop through freelancers -->
+        <div th:each="f : ${freelancers}" class="freelancer-card">
+            <div th:if="${f.isVerified}" class="verify-badge">✓ Verified</div>
+            <div class="freelancer-avatar" th:text="${f.fullName.substring(0,1)}">A</div>
+            <h3 class="freelancer-name" th:text="${f.fullName}">Full Name</h3>
+            <p class="freelancer-tagline" th:text="${f.category != null ? f.category : f.skills}">Category</p>
+            <div class="freelancer-rate">
+                ₹<span th:text="${#numbers.formatDecimal(f.hourlyRate, 1, 0)}">20</span> <span>/ hour</span>
+            </div>
+            <div class="freelancer-stats">
+                ★ <span th:text="${#numbers.formatDecimal(f.performanceScore, 1, 1)}">4.9</span>
+                <span class="freelancer-jobs" th:text="'(' + ${f.completedProjects} + ' jobs)'">(7611 jobs)</span>
+            </div>
+            <a th:href="@{/profile/{id}(id=${f.id})}" class="btn-view">View Profile</a>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${freelancers == null or freelancers.isEmpty()}" class="empty-state">
+            <div class="empty-icon">📂</div>
+            <h3>No freelancers found in this category yet</h3>
+            <p>Try exploring our other professional sectors!</p>
+            <a href="/" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+
+</html>

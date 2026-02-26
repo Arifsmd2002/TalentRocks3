@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Talentrox - The Future of Transparent Freelancing</title>
+    <title>Talentrock - The Future of Transparent Freelancing</title>
     <meta name="description"
-        content="Talentrox - Merit-based freelancing platform with demo-first hiring, milestone tracking, and 5% commission." />
+        content="Talentrock - Merit-based freelancing platform with demo-first hiring, milestone tracking, and 5% commission." />
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
 </head>
@@ -14,13 +14,13 @@
 <body>
 
     <!-- =============================================
-     TALENTROX - HOME PAGE
+     Talentrock - HOME PAGE
      ============================================= -->
 
     <nav class="navbar">
         <a href="/" class="navbar-brand">
-            <div class="logo-icon">⚡</div>
-            Talentrox
+            <img th:src="@{/images/logo.png}" alt="Talentrock Logo">
+            Talentrock
         </a>
         <ul class="navbar-nav">
             <li><a href="/" class="nav-link active">Home</a></li>
@@ -53,11 +53,12 @@
                 Hire by <span class="gradient-text">Skill</span>,<br />Not by Price
             </h1>
             <p class="hero-subtitle">
-                Talentrox revolutionizes freelancing with demo-first hiring, transparent milestones, real-time tracking,
+                Talentrock revolutionizes freelancing with demo-first hiring, transparent milestones, real-time
+                tracking,
                 and just 5% commission. No more price wars — only proven talent wins.
             </p>
             <div class="hero-actions">
-                <a href="/register" class="btn btn-primary btn-lg">🚀 Start Free Today</a>
+                <a href="/register" class="btn btn-primary btn-lg">Start Free Today</a>
                 <a href="/about" class="btn btn-outline btn-lg">Learn More</a>
             </div>
             <div class="hero-stats">
@@ -87,7 +88,7 @@
     <section class="features-section">
         <div class="container" style="max-width:1400px; margin:0 auto; padding:0 2rem;">
             <div class="section-header">
-                <span class="section-tag">🎯 What Makes Us Different</span>
+                <span class="section-tag"> What Makes Us Different</span>
                 <h2 class="section-title">Built for the <span class="gradient-text">Future</span> of Work</h2>
                 <p class="section-subtitle">Every feature designed to eliminate trust issues and create a merit-based
                     ecosystem</p>
@@ -134,11 +135,11 @@
     </section>
 
     <!-- HOW IT WORKS -->
-    <section style="padding: 5rem 2rem; background: rgba(255,255,255,0.02);">
-        <div style="max-width:1200px; margin:0 auto;">
+    <section class="how-it-works-section">
+        <div class="container" style="max-width:1200px; margin:0 auto;">
             <div class="section-header">
-                <span class="section-tag">🔄 The Process</span>
-                <h2 class="section-title">How <span class="gradient-text">Talentrox</span> Works</h2>
+                <span class="section-tag">The Process</span>
+                <h2 class="section-title">How <span class="gradient-text">Talentrock</span> Works</h2>
                 <p class="section-subtitle">A transparent end-to-end workflow for clients and freelancers</p>
             </div>
             <div class="steps-grid">
@@ -171,6 +172,77 @@
         </div>
     </section>
 
+    <!-- CATEGORIES SECTION -->
+    <section class="categories-section">
+        <div class="categories-container">
+            <div class="categories-title">
+                Get work done in<br>
+                different categories
+            </div>
+            <div class="categories-grid">
+                <!-- Column 1 -->
+                <div class="category-col">
+                    <a th:href="@{/hire/Website-Design}" class="category-item">Website Design</a>
+                    <a th:href="@{/hire/Mobile-Apps}" class="category-item">Mobile Apps</a>
+                    <a th:href="@{/hire/Android-Apps}" class="category-item">Android Apps</a>
+                    <a th:href="@{/hire/iPhone-Apps}" class="category-item">iPhone Apps</a>
+                    <a th:href="@{/hire/Software-Architecture}" class="category-item">Software Architecture</a>
+                    <a th:href="@{/hire/Graphic-Design}" class="category-item">Graphic Design</a>
+                    <a th:href="@{/hire/Logo-Design}" class="category-item">Logo Design</a>
+                    <a th:href="@{/hire/Public-Relations}" class="category-item">Public Relations</a>
+                    <a th:href="@{/hire/Logistics}" class="category-item">Logistics</a>
+                    <a th:href="@{/hire/Proofreading}" class="category-item">Proofreading</a>
+                    <a th:href="@{/hire/Translation}" class="category-item">Translation</a>
+                    <a th:href="@{/hire/Research}" class="category-item">Research</a>
+                </div>
+                <!-- Column 2 -->
+                <div class="category-col">
+                    <a th:href="@{/hire/Research-Writing}" class="category-item">Research Writing</a>
+                    <a th:href="@{/hire/Article-Writing}" class="category-item">Article Writing</a>
+                    <a th:href="@{/hire/Web-Scraping}" class="category-item">Web Scraping</a>
+                    <a th:href="@{/hire/HTML}" class="category-item">HTML</a>
+                    <a th:href="@{/hire/CSS}" class="category-item">CSS</a>
+                    <a th:href="@{/hire/HTML-5}" class="category-item">HTML 5</a>
+                    <a th:href="@{/hire/Javascript}" class="category-item">Javascript</a>
+                    <a th:href="@{/hire/Data-Processing}" class="category-item">Data Processing</a>
+                    <a th:href="@{/hire/Python}" class="category-item">Python</a>
+                    <a th:href="@{/hire/Wordpress}" class="category-item">Wordpress</a>
+                    <a th:href="@{/hire/Web-Search}" class="category-item">Web Search</a>
+                    <a th:href="@{/hire/Finance}" class="category-item">Finance</a>
+                </div>
+                <!-- Column 3 -->
+                <div class="category-col">
+                    <a th:href="@{/hire/Legal}" class="category-item">Legal</a>
+                    <a th:href="@{/hire/Linux}" class="category-item">Linux</a>
+                    <a th:href="@{/hire/Manufacturing}" class="category-item">Manufacturing</a>
+                    <a th:href="@{/hire/Data-Entry}" class="category-item">Data Entry</a>
+                    <a th:href="@{/hire/Content-Writing}" class="category-item">Content Writing</a>
+                    <a th:href="@{/hire/Marketing}" class="category-item">Marketing</a>
+                    <a th:href="@{/hire/Excel}" class="category-item">Excel</a>
+                    <a th:href="@{/hire/Ghostwriting}" class="category-item">Ghostwriting</a>
+                    <a th:href="@{/hire/Copywriting}" class="category-item">Copywriting</a>
+                    <a th:href="@{/hire/Accounting}" class="category-item">Accounting</a>
+                    <a th:href="@{/hire/MySQL}" class="category-item">MySQL</a>
+                    <a th:href="@{/hire/Cplus-Programming}" class="category-item">C++ Programming</a>
+                </div>
+                <!-- Column 4 -->
+                <div class="category-col">
+                    <a th:href="@{/hire/Banner-Design}" class="category-item">Banner Design</a>
+                    <a th:href="@{/hire/Illustration}" class="category-item">Illustration</a>
+                    <a th:href="@{/hire/Link-Building}" class="category-item">Link Building</a>
+                    <a th:href="@{/hire/Csharp-Programming}" class="category-item">C# Programming</a>
+                    <a th:href="@{/hire/PHP}" class="category-item">PHP</a>
+                    <a th:href="@{/hire/3D-Modelling}" class="category-item">3D Modelling</a>
+                    <a th:href="@{/hire/Photoshop}" class="category-item">Photoshop</a>
+                    <a th:href="@{/hire/Technical-Writing}" class="category-item">Technical Writing</a>
+                    <a th:href="@{/hire/Blogging}" class="category-item">Blogging</a>
+                    <a th:href="@{/hire/Internet-Marketing}" class="category-item">Internet Marketing</a>
+                    <a th:href="@{/hire/eCommerce}" class="category-item">eCommerce</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA SECTION -->
     <section style="padding: 6rem 2rem; text-align: center;">
         <div style="max-width: 700px; margin: 0 auto;">
@@ -179,7 +251,7 @@
             </h2>
             <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 2.5rem; line-height: 1.7;">
                 Join thousands of clients and freelancers building trust-based, merit-driven work relationships on
-                Talentrox.
+                Talentrock.
             </p>
             <div class="flex flex-center gap-2 flex-wrap">
                 <a href="/register?role=CLIENT" class="btn btn-primary btn-lg">Hire a Freelancer</a>
@@ -189,43 +261,7 @@
     </section>
 
     <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-grid">
-            <div>
-                <div class="footer-brand-name">⚡ Talentrox</div>
-                <p class="footer-desc">The future of transparent, merit-based freelancing. No price wars. Only proven
-                    talent wins.</p>
-            </div>
-            <div>
-                <div class="footer-heading">Platform</div>
-                <ul class="footer-links">
-                    <li><a href="/register">Sign Up</a></li>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/about">About Us</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </div>
-            <div>
-                <div class="footer-heading">For Clients</div>
-                <ul class="footer-links">
-                    <li><a href="/register?role=CLIENT">Post a Project</a></li>
-                    <li><a href="/about">How It Works</a></li>
-                    <li><a href="#">Pricing</a></li>
-                </ul>
-            </div>
-            <div>
-                <div class="footer-heading">For Freelancers</div>
-                <ul class="footer-links">
-                    <li><a href="/register?role=FREELANCER">Join as Freelancer</a></li>
-                    <li><a href="/freelancer/browse" sec:authorize="hasRole('FREELANCER')">Browse Jobs</a></li>
-                    <li><a href="#">Success Stories</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            © 2025 Talentrox. All rights reserved. Built for merit. Built for trust.
-        </div>
-    </footer>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 
     <!-- YOUTUBE BACKGROUND VIDEO SCRIPT -->
     <script>
@@ -235,14 +271,18 @@
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         var player;
-        // Selection of 6 high-quality videos related to freelancing, coding, and remote work
+        // Expanded selection of 10 breathtaking 4K nature and drone aerial loops
         var videoList = [
-            '8Z1eMy2FoX4', // Modern Coding Environment
-            'hVvEISFw9w0', // Office Productivity
-            '3bGQp_E14gA', // Tech Workspace
-            '2yJg_x2i30k', // Design / Creative Office
-            'LS-ErOKpO4E', // Digital Nomad / Remote Work
-            'aDptDqF_nU0'  // Professional Collaboration
+            'yYyGjB-1wJk', // Famous Landscapes
+            'JcWvX90E_Yw', // Amazing Nature Drone
+            'zRpazyH1WzI', // 4K Drone Stock
+            '0kYv_3jV3pA', // Limitless Inspiration
+            'CxS62Yc9iIk', // Nature Relaxation / Ocean
+            '7q_S0mD-vjU', // Mountains and Lakes
+            'eG4Yl387t1U', // Breathtaking Drone views
+            '--CqUrPL_ds', // Coastal / Scenic Film
+            'Xv0A88mNl-4', // Iceland Drone views
+            'UvUuGueM0uE'  // River / Valley Aerial
         ];
         var currentVideoIndex = 0;
         var rotateInterval;
@@ -264,35 +304,45 @@
                 },
                 events: {
                     'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError // ADDED ERROR HANDLING
                 }
             });
         }
 
         function onPlayerReady(event) {
             event.target.playVideo();
-            // Automatically switch video every 45 seconds for a dynamic feel
             startRotation();
         }
 
         function startRotation() {
             if (rotateInterval) clearInterval(rotateInterval);
-            rotateInterval = setInterval(nextVideo, 45000); // 45 seconds
+            rotateInterval = setInterval(nextVideo, 5000); // 5 seconds interval
         }
 
         function nextVideo() {
             currentVideoIndex = (currentVideoIndex + 1) % videoList.length;
             if (player && player.loadVideoById) {
+                // Simplified call for fastest execution
                 player.loadVideoById(videoList[currentVideoIndex]);
+                player.mute();
+                player.playVideo();
             }
         }
 
         function onPlayerStateChange(event) {
-            // When video ends (state 0), switch immediately
+            // If video ends naturally before the 5s timer, skip to next
             if (event.data === YT.PlayerState.ENDED) {
                 nextVideo();
-                startRotation(); // Reset timer
+                startRotation();
             }
+        }
+
+        // AUTO-SKIP IF VIDEO IS UNAVAILABLE
+        function onPlayerError(event) {
+            console.log("Video unavailable, skipping to next...");
+            nextVideo();
+            startRotation();
         }
     </script>
 </body>

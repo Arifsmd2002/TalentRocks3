@@ -93,6 +93,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public List<User> findFreelancersByCategory(String category) {
+        return userRepository.findByRoleAndIsActiveAndCategoryContainingIgnoreCase(Role.FREELANCER, true, category);
+    }
+
     public long countByRole(Role role) {
         return userRepository.findByRole(role).size();
     }
