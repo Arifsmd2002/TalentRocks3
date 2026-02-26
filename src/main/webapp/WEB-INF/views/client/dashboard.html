@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client Dashboard | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <div th:replace="~{fragments/client-sidebar :: client-sidebar}"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header flex-between">
+                <div>
+                    <h1 class="page-title">Welcome back, <span class="gradient-text"
+                            th:text="${user.fullName != null ? user.fullName : user.username}">Client</span> 👋</h1>
+                    <p class="page-subtitle">Here's your project overview for today</p>
+                </div>
+                <a href="/client/post-project" class="btn btn-primary">➕ Post New Project</a>
+            </div>
+
+            <!-- Flash Messages -->
+            <div th:if="${success}" class="alert alert-success">✅ <span th:text="${success}"></span></div>
+            <div th:if="${error}" class="alert alert-error">⚠️ <span th:text="${error}"></span></div>
+
+            <!-- Stats Row -->
+            <div class="grid grid-4 mb-4">
+                <div class="stat-card">
+                    <div class="stat-icon purple">📂</div>
+                    <div>
+                        <div class="stat-value" th:text="${projects != null ? projects.size() : 0}">0</div>
+                        <div class="stat-label">Total Projects</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">🟢</div>
+                    <div>
+                        <div class="stat-value" th:text="${openCount}">0</div>
+                        <div class="stat-label">Open Projects</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon teal">⚙️</div>
+                    <div>
+                        <div class="stat-value" th:text="${inProgressCount}">0</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold">✅</div>
+                    <div>
+                        <div class="stat-value" th:text="${completedCount}">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet Quick View -->
+            <div class="grid grid-2 mb-4">
+                <div class="wallet-box">
+                    <div class="wallet-label">💰 Wallet Balance</div>
+                    <div class="wallet-amount">₹<span
+                            th:text="${#numbers.formatDecimal(user.walletBalance, 1, 2)}">0.00</span></div>
+                    <div style="margin-top:1.5rem; display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <a href="/client/wallet" class="btn btn-ghost btn-sm"
+                            style="background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.3); color:white;">Top
+                            Up</a>
+                    </div>
+                </div>
+                <div class="card" style="background:var(--bg-card);">
+                    <div class="card-body flex-center" style="flex-direction:column; gap:0.5rem; height:100%;">
+                        <div style="font-size:3rem;">🎯</div>
+                        <div style="font-weight:700; font-size:1.1rem;"
+                            th:text="${user.performanceScore != null ? user.performanceScore + '/10' : '5.0/10'}">5.0/10
+                        </div>
+                        <div class="text-muted text-sm">Performance Score</div>
+                        <div class="text-secondary-color text-sm"
+                            th:text="${'Completed: ' + (user.completedProjects != null ? user.completedProjects : 0) + ' projects'}">
+                            Completed: 0 projects</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Table -->
+            <div class="card">
+                <div class="card-header flex-between">
+                    <span>📋 My Projects</span>
+                    <a href="/client/post-project" class="btn btn-primary btn-sm">+ New</a>
+                </div>
+                <div th:if="${projects == null or projects.isEmpty()}"
+                    style="padding:3rem; text-align:center; color:var(--text-muted);">
+                    <div style="font-size:3rem; margin-bottom:1rem;">📂</div>
+                    <p style="font-size:1rem; margin-bottom:1rem;">No projects yet!</p>
+                    <a href="/client/post-project" class="btn btn-primary">Post Your First Project</a>
+                </div>
+                <div th:if="${projects != null and !projects.isEmpty()}" class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Category</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                                <th>Bids</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="project : ${projects}">
+                                <td>
+                                    <div style="font-weight:600;" th:text="${project.title}">Project Title</div>
+                                    <div class="text-muted text-xs"
+                                        th:text="${project.createdAt != null ? #temporals.format(project.createdAt, 'dd MMM yyyy') : ''}">
+                                    </div>
+                                </td>
+                                <td><span class="text-secondary-color text-sm"
+                                        th:text="${project.category}">Category</span></td>
+                                <td>
+                                    <span th:if="${project.budgetMin != null and project.budgetMax != null}">
+                                        ₹<span th:text="${#numbers.formatDecimal(project.budgetMin, 1, 0)}">0</span>
+                                        – ₹<span th:text="${#numbers.formatDecimal(project.budgetMax, 1, 0)}">0</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span th:switch="${project.status.name()}">
+                                        <span th:case="'OPEN'" class="project-badge badge-open">🟢 Open</span>
+                                        <span th:case="'IN_PROGRESS'" class="project-badge badge-progress">🔵 In
+                                            Progress</span>
+                                        <span th:case="'COMPLETED'" class="project-badge badge-completed">✅ Done</span>
+                                        <span th:case="'CANCELLED'" class="project-badge badge-cancelled">❌
+                                            Cancelled</span>
+                                        <span th:case="*" class="project-badge badge-pending"
+                                            th:text="${project.status}">Status</span>
+                                    </span>
+                                </td>
+                                <td><span th:text="${project.bids != null ? project.bids.size() : 0}">0</span> bids</td>
+                                <td>
+                                    <a th:href="@{/client/project/{id}(id=${project.id})}"
+                                        class="btn btn-ghost btn-sm">View →</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

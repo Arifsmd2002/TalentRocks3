@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Users | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div class="sidebar">
+            <a href="/" class="sidebar-brand">
+                <div class="logo-icon">⚡</div>Talentrox
+            </a>
+            <div class="sidebar-section">
+                <div class="sidebar-label">Admin Panel</div>
+                <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="/admin/users" class="sidebar-link active"><span class="icon">👥</span> Manage Users</a>
+                <a href="/admin/projects" class="sidebar-link"><span class="icon">📋</span> All Projects</a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/logout" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;">Sign Out</a>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Manage Users 👥</h1>
+                <p class="page-subtitle">View and manage all registered users</p>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success">✅ <span th:text="${success}"></span></div>
+
+            <div class="card">
+                <div th:if="${users == null or users.isEmpty()}"
+                    style="padding:3rem; text-align:center; color:var(--text-muted);">No users registered yet.</div>
+                <div class="table-wrapper" th:if="${users != null and !users.isEmpty()}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Performance</th>
+                                <th>Wallet (₹)</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="u, iter : ${users}">
+                                <td class="text-muted text-sm" th:text="${iter.index + 1}">1</td>
+                                <td>
+                                    <div class="flex items-center gap-2">
+                                        <div class="avatar" style="width:32px;height:32px;font-size:0.8rem;"
+                                            th:text="${u.fullName != null ? u.fullName.substring(0,1).toUpperCase() : u.username.substring(0,1).toUpperCase()}">
+                                            U</div>
+                                        <div>
+                                            <div style="font-weight:600; font-size:0.9rem;"
+                                                th:text="${u.fullName != null ? u.fullName : u.username}">Name</div>
+                                            <div class="text-muted text-xs" th:text="'@' + ${u.username}">@username
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-secondary-color text-sm" th:text="${u.email}">email</td>
+                                <td>
+                                    <span th:switch="${u.role.name()}">
+                                        <span th:case="'CLIENT'" class="project-badge"
+                                            style="background:rgba(108,99,255,0.12);color:var(--primary);">💼
+                                            Client</span>
+                                        <span th:case="'FREELANCER'" class="project-badge badge-completed">🎨
+                                            Freelancer</span>
+                                        <span th:case="'ADMIN'" class="project-badge badge-cancelled">🛡️ Admin</span>
+                                    </span>
+                                </td>
+                                <td style="font-weight:600;"
+                                    th:text="${u.performanceScore != null ? u.performanceScore + '/10' : '5.0/10'}">5.0
+                                </td>
+                                <td style="font-weight:600; color:var(--secondary);"
+                                    th:text="${#numbers.formatDecimal(u.walletBalance, 1, 0)}">0</td>
+                                <td>
+                                    <span th:if="${u.isActive}" class="project-badge badge-open">🟢 Active</span>
+                                    <span th:unless="${u.isActive}" class="project-badge badge-cancelled">🔴
+                                        Suspended</span>
+                                </td>
+                                <td class="text-muted text-sm"
+                                    th:text="${u.createdAt != null ? #temporals.format(u.createdAt, 'dd MMM yy') : '-'}">
+                                    Date</td>
+                                <td>
+                                    <form th:action="@{/admin/users/{id}/toggle(id=${u.id})}" method="post"
+                                        style="display:inline;">
+                                        <button type="submit"
+                                            th:class="${u.isActive ? 'btn btn-danger btn-sm' : 'btn btn-success btn-sm'}"
+                                            th:text="${u.isActive ? 'Suspend' : 'Activate'}">Toggle</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

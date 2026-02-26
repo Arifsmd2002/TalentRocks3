@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browse Projects | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/freelancer-sidebar :: freelancer-sidebar}"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Browse Projects 🔍</h1>
+                <p class="page-subtitle">Find the perfect project that matches your skills</p>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success">✅ <span th:text="${success}"></span></div>
+            <div th:if="${error}" class="alert alert-error">⚠️ <span th:text="${error}"></span></div>
+
+            <!-- Search -->
+            <div class="search-box mb-4" style="max-width:600px;">
+                <form th:action="@{/freelancer/browse}" method="get"
+                    style="display:flex; width:100%; align-items:center; gap:0.5rem;">
+                    <span style="font-size:1.1rem;">🔍</span>
+                    <input type="text" name="keyword" class="form-control"
+                        style="background:transparent;border:none;box-shadow:none;padding:8px 0;" th:value="${keyword}"
+                        placeholder="Search by skill, category, or keyword..." />
+                    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+                </form>
+            </div>
+
+            <!-- Projects Grid -->
+            <div th:if="${projects == null or projects.isEmpty()}"
+                style="text-align:center; padding:4rem 2rem; color:var(--text-muted);">
+                <div style="font-size:4rem; margin-bottom:1rem;">📭</div>
+                <h3 style="margin-bottom:0.5rem;">No projects found</h3>
+                <p class="text-sm">Try a different search, or check back later for new opportunities</p>
+            </div>
+
+            <div class="grid grid-2" th:if="${projects != null and !projects.isEmpty()}">
+                <div th:each="project : ${projects}" class="project-card">
+                    <div class="flex-between mb-3">
+                        <span class="project-badge badge-open">🟢 Open</span>
+                        <span class="text-muted text-xs"
+                            th:text="${project.createdAt != null ? #temporals.format(project.createdAt, 'dd MMM yyyy') : ''}">Date</span>
+                    </div>
+                    <h3 style="font-size:1.1rem; margin-bottom:0.5rem;" th:text="${project.title}">Project Title</h3>
+                    <p class="text-secondary-color text-sm mb-3"
+                        style="line-height:1.6; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;"
+                        th:text="${project.description}">Description</p>
+
+                    <div class="flex flex-wrap gap-1 mb-3" th:if="${project.skillsRequired}">
+                        <span th:each="skill : ${project.skillsRequired.split(',')}"
+                            style="background:rgba(108,99,255,0.12); color:var(--primary-light); padding:3px 10px; border-radius:100px; font-size:0.75rem; font-weight:500;"
+                            th:text="${skill.trim()}">Skill</span>
+                    </div>
+
+                    <div class="flex-between items-center">
+                        <div>
+                            <span style="font-weight:700; color:var(--secondary);">
+                                ₹<span th:text="${#numbers.formatDecimal(project.budgetMin, 1, 0)}">0</span>
+                                – ₹<span th:text="${#numbers.formatDecimal(project.budgetMax, 1, 0)}">0</span>
+                            </span>
+                            <span th:if="${project.deadline}" class="text-muted text-xs" style="margin-left:8px;">
+                                📅 <span th:text="${#temporals.format(project.deadline, 'dd MMM')}">Date</span>
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-muted text-xs"
+                                th:text="${project.bids != null ? project.bids.size() + ' bids' : '0 bids'}">Bids</span>
+                            <a th:href="@{/freelancer/project/{id}(id=${project.id})}"
+                                class="btn btn-primary btn-sm">Bid Now →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

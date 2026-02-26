@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <div class="logo-icon">⚡</div>Talentrox
+        </a>
+        <ul class="navbar-nav">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/about" class="nav-link active">About</a></li>
+            <li><a href="/login" class="btn btn-primary btn-sm" style="margin-left:8px">Get Started</a></li>
+        </ul>
+    </nav>
+
+    <div style="min-height:100vh; padding:120px 2rem 4rem; max-width:900px; margin:0 auto;">
+        <div class="text-center mb-4">
+            <span class="section-tag">🚀 About Us</span>
+            <h1 style="font-size:3.5rem; font-weight:900; margin:1rem 0;">The Future of <span
+                    class="gradient-text">Transparent</span> Freelancing</h1>
+            <p style="font-size:1.15rem; color:var(--text-secondary); line-height:1.8; max-width:700px; margin:0 auto;">
+                Talentrox was built to solve the biggest problems in freelancing: price wars, fake promises, poor
+                milestone tracking, high commission fees, and lack of transparency.
+            </p>
+        </div>
+
+        <div class="features-grid mt-4">
+            <div class="feature-card">
+                <div class="feature-icon purple">🎯</div>
+                <h3 class="feature-title">Our Mission</h3>
+                <p class="feature-desc">Shift freelancing from "lowest bid wins" to "best demonstrated skill wins" —
+                    creating a merit-based ecosystem.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon teal">💡</div>
+                <h3 class="feature-title">Our Vision</h3>
+                <p class="feature-desc">A world where every freelancer is valued for their actual skill, not their
+                    willingness to race to the bottom on price.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon gold">⭐</div>
+                <h3 class="feature-title">Our Values</h3>
+                <p class="feature-desc">Transparency, fairness, merit-based competition, and building trust between
+                    clients and freelancers.</p>
+            </div>
+        </div>
+
+        <div class="card mt-4"
+            style="background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(0,212,170,0.05)); border-color: rgba(108,99,255,0.2);">
+            <div class="card-body text-center">
+                <h2 style="font-size:2rem; margin-bottom:1rem;">Why <span class="gradient-text">Only 5%</span>
+                    Commission?</h2>
+                <p
+                    style="color:var(--text-secondary); font-size:1.05rem; line-height:1.8; max-width:600px; margin:0 auto 2rem;">
+                    While platforms like Upwork charge 20%+, Talentrox charges only 5%. We believe freelancers should
+                    keep more of what they earn. Our sustainable model relies on volume, not exploitation.
+                </p>
+                <a href="/register" class="btn btn-primary btn-lg">Join Talentrox Today 🚀</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-bottom">© 2025 Talentrox. Built for merit. Built for trust.</div>
+    </footer>
+</body>
+
+</html>

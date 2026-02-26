@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wallet | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/client-sidebar :: client-sidebar}"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Wallet 💰</h1>
+                <p class="page-subtitle">Manage your Talentrox balance</p>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success">✅ <span th:text="${success}"></span></div>
+            <div th:if="${error}" class="alert alert-error">⚠️ <span th:text="${error}"></span></div>
+
+            <div class="grid grid-2 mb-4">
+                <!-- Balance Card -->
+                <div class="wallet-box">
+                    <div class="wallet-label">Current Balance</div>
+                    <div class="wallet-amount">₹<span
+                            th:text="${#numbers.formatDecimal(user.walletBalance, 1, 2)}">0.00</span></div>
+                    <div class="text-sm mt-2" style="opacity:0.75;">Platform commission: 5% per milestone</div>
+                </div>
+
+                <!-- Add Funds -->
+                <div class="card">
+                    <div class="card-body">
+                        <h3 style="margin-bottom:1.25rem;">Add Funds</h3>
+                        <form th:action="@{/client/wallet/add}" method="post">
+                            <div class="form-group">
+                                <label class="form-label">Amount (₹)</label>
+                                <input type="number" name="amount" class="form-control" placeholder="Enter amount"
+                                    min="100" required />
+                            </div>
+                            <div class="flex gap-2 mb-3">
+                                <button type="button" class="btn btn-ghost btn-sm"
+                                    onclick="document.querySelector('[name=amount]').value='500'">₹500</button>
+                                <button type="button" class="btn btn-ghost btn-sm"
+                                    onclick="document.querySelector('[name=amount]').value='1000'">₹1,000</button>
+                                <button type="button" class="btn btn-ghost btn-sm"
+                                    onclick="document.querySelector('[name=amount]').value='5000'">₹5,000</button>
+                                <button type="button" class="btn btn-ghost btn-sm"
+                                    onclick="document.querySelector('[name=amount]').value='10000'">₹10,000</button>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width:100%;">Add to Wallet ↗</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

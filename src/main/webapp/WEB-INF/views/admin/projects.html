@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Projects | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div class="sidebar">
+            <a href="/" class="sidebar-brand">
+                <div class="logo-icon">⚡</div>Talentrox
+            </a>
+            <div class="sidebar-section">
+                <div class="sidebar-label">Admin Panel</div>
+                <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="/admin/users" class="sidebar-link"><span class="icon">👥</span> Manage Users</a>
+                <a href="/admin/projects" class="sidebar-link active"><span class="icon">📋</span> All Projects</a>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/logout" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;">Sign Out</a>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">All Projects 📋</h1>
+                <p class="page-subtitle">Monitor all platform projects</p>
+            </div>
+
+            <div class="card">
+                <div th:if="${projects == null or projects.isEmpty()}"
+                    style="padding:3rem; text-align:center; color:var(--text-muted);">No projects yet.</div>
+                <div class="table-wrapper" th:if="${projects != null and !projects.isEmpty()}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Project</th>
+                                <th>Client</th>
+                                <th>Freelancer</th>
+                                <th>Budget</th>
+                                <th>Status</th>
+                                <th>Posted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="p, iter : ${projects}">
+                                <td class="text-muted text-sm" th:text="${iter.index + 1}">1</td>
+                                <td>
+                                    <div style="font-weight:600; font-size:0.9rem;" th:text="${p.title}">Title</div>
+                                    <div class="text-muted text-xs" th:text="${p.category}">Category</div>
+                                </td>
+                                <td class="text-secondary-color text-sm"
+                                    th:text="${p.client.fullName != null ? p.client.fullName : p.client.username}">
+                                    Client</td>
+                                <td class="text-secondary-color text-sm"
+                                    th:text="${p.assignedFreelancer != null ? (p.assignedFreelancer.fullName != null ? p.assignedFreelancer.fullName : p.assignedFreelancer.username) : '—'}">
+                                    —</td>
+                                <td style="font-size:0.85rem;">
+                                    <span th:if="${p.budgetMin != null}">₹<span
+                                            th:text="${#numbers.formatDecimal(p.budgetMin, 1, 0)}">0</span> – ₹<span
+                                            th:text="${#numbers.formatDecimal(p.budgetMax, 1, 0)}">0</span></span>
+                                </td>
+                                <td>
+                                    <span th:switch="${p.status.name()}">
+                                        <span th:case="'OPEN'" class="project-badge badge-open">🟢 Open</span>
+                                        <span th:case="'IN_PROGRESS'" class="project-badge badge-progress">🔵
+                                            Active</span>
+                                        <span th:case="'COMPLETED'" class="project-badge badge-completed">✅ Done</span>
+                                        <span th:case="'CANCELLED'" class="project-badge badge-cancelled">❌
+                                            Cancelled</span>
+                                        <span th:case="*" class="project-badge badge-pending"
+                                            th:text="${p.status}">Status</span>
+                                    </span>
+                                </td>
+                                <td class="text-muted text-sm"
+                                    th:text="${p.createdAt != null ? #temporals.format(p.createdAt, 'dd MMM yy') : '-'}">
+                                    Date</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

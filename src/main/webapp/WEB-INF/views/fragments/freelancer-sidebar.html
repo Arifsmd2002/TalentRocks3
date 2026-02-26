@@ -1,0 +1,52 @@
+<!-- FREELANCER SIDEBAR FRAGMENT -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="freelancer-sidebar" class="sidebar">
+        <a href="/" class="sidebar-brand">
+            <div class="logo-icon">⚡</div>
+            Talentrox
+        </a>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Main</div>
+            <a th:href="@{/freelancer/dashboard}" class="sidebar-link"
+                th:classappend="${currentPage == 'dashboard' ? 'active' : ''}">
+                <span class="icon">📊</span> Dashboard
+            </a>
+            <a th:href="@{/freelancer/browse}" class="sidebar-link"
+                th:classappend="${currentPage == 'browse' ? 'active' : ''}">
+                <span class="icon">🔍</span> Browse Projects
+            </a>
+            <a th:href="@{/freelancer/profile}" class="sidebar-link"
+                th:classappend="${currentPage == 'profile' ? 'active' : ''}">
+                <span class="icon">👤</span> My Profile
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Finance</div>
+            <a th:href="@{/freelancer/wallet}" class="sidebar-link"
+                th:classappend="${currentPage == 'wallet' ? 'active' : ''}">
+                <span class="icon">💰</span> Wallet
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="flex items-center gap-2" style="margin-bottom:12px;">
+                <div class="avatar"
+                    th:text="${user != null and user.fullName != null ? user.fullName.substring(0,1).toUpperCase() : 'F'}">
+                    F</div>
+                <div>
+                    <div style="font-size:0.9rem; font-weight:600;"
+                        th:text="${user != null ? user.fullName : 'Freelancer'}">Freelancer</div>
+                    <div class="text-muted text-xs">Freelancer</div>
+                </div>
+            </div>
+            <a href="/logout" class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;">Sign Out</a>
+        </div>
+    </div>
+</body>
+
+</html>

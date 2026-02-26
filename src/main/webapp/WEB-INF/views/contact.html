@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-brand">
+            <div class="logo-icon">⚡</div>Talentrox
+        </a>
+        <ul class="navbar-nav">
+            <li><a href="/" class="nav-link">Home</a></li>
+            <li><a href="/about" class="nav-link">About</a></li>
+            <li><a href="/contact" class="nav-link active">Contact</a></li>
+            <li><a href="/login" class="btn btn-primary btn-sm" style="margin-left:8px">Get Started</a></li>
+        </ul>
+    </nav>
+
+    <div style="min-height:100vh; padding:120px 2rem 4rem; max-width:600px; margin:0 auto;">
+        <div class="text-center mb-4">
+            <span class="section-tag">📬 Contact</span>
+            <h1 style="font-size:3rem; font-weight:900; margin:1rem 0;">Get in <span class="gradient-text">Touch</span>
+            </h1>
+            <p style="color:var(--text-secondary);">Have a question or need support? We're here to help.</p>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Your Name</label>
+                    <input type="text" class="form-control" placeholder="John Doe" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" placeholder="john@example.com" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" rows="5" placeholder="Tell us how we can help..."></textarea>
+                </div>
+                <button class="btn btn-primary" style="width:100%;">Send Message 📨</button>
+            </div>
+        </div>
+
+        <div class="grid grid-2 mt-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size:2rem; margin-bottom:0.5rem;">📧</div>
+                    <div class="font-semibold mb-1">Email</div>
+                    <div class="text-secondary-color text-sm">support@talentrox.in</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div style="font-size:2rem; margin-bottom:0.5rem;">🌐</div>
+                    <div class="font-semibold mb-1">Website</div>
+                    <div class="text-secondary-color text-sm">www.talentrox.in</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post Project | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/client-sidebar :: client-sidebar}"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Post a New Project ✨</h1>
+                <p class="page-subtitle">Describe your project clearly to attract the best talent</p>
+            </div>
+
+            <div th:if="${error}" class="alert alert-error">⚠️ <span th:text="${error}"></span></div>
+
+            <div style="max-width:760px;">
+                <div class="card animate-fade-up">
+                    <div class="card-body">
+                        <form th:action="@{/client/post-project}" method="post">
+                            <div class="form-group">
+                                <label class="form-label">Project Title *</label>
+                                <input type="text" name="title" class="form-control"
+                                    placeholder="e.g. Build a React eCommerce Website" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Category *</label>
+                                <select name="category" class="form-control" required>
+                                    <option value="">-- Select Category --</option>
+                                    <option>Web Development</option>
+                                    <option>Mobile App Development</option>
+                                    <option>UI/UX Design</option>
+                                    <option>Graphic Design</option>
+                                    <option>Data Science & ML</option>
+                                    <option>Digital Marketing</option>
+                                    <option>Content Writing</option>
+                                    <option>Video Editing</option>
+                                    <option>SEO & Analytics</option>
+                                    <option>Backend Development</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Project Description * <span class="text-muted text-xs">(Be
+                                        detailed — better descriptions get better bids)</span></label>
+                                <textarea name="description" class="form-control" rows="6"
+                                    placeholder="Describe your project requirements, goals, and any specific preferences..."
+                                    required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Required Skills</label>
+                                <input type="text" name="skillsRequired" class="form-control"
+                                    placeholder="e.g. React, Node.js, MySQL, Figma (comma-separated)" />
+                            </div>
+
+                            <div class="grid grid-2" style="gap:1rem;">
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Min Budget (₹) *</label>
+                                    <input type="number" name="budgetMin" class="form-control" placeholder="5000"
+                                        min="100" required />
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Max Budget (₹) *</label>
+                                    <input type="number" name="budgetMax" class="form-control" placeholder="50000"
+                                        min="100" required />
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label class="form-label">Project Deadline</label>
+                                <input type="date" name="deadline" class="form-control" />
+                            </div>
+
+                            <div class="flex gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">🚀 Post Project</button>
+                                <a href="/client/dashboard" class="btn btn-ghost">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

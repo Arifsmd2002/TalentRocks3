@@ -1,0 +1,138 @@
+package com.project2.controller;
+
+import com.project2.model.*;
+import com.project2.service.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Controller
+@RequestMapping("/client")
+public class ClientController {
+
+    private final UserService userService;
+    private final ProjectService projectService;
+    private final BidService bidService;
+    private final MilestoneService milestoneService;
+
+    public ClientController(UserService userService, ProjectService projectService, BidService bidService,
+            MilestoneService milestoneService) {
+        this.userService = userService;
+        this.projectService = projectService;
+        this.bidService = bidService;
+        this.milestoneService = milestoneService;
+    }
+
+    private User getCurrentUser(Authentication auth) {
+        return userService.findByUsername(auth.getName()).orElseThrow();
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Authentication auth, Model model) {
+        User client = getCurrentUser(auth);
+        List<Project> projects = projectService.findByClient(client);
+        model.addAttribute("user", client);
+        model.addAttribute("projects", projects);
+        model.addAttribute("openCount", projects.stream().filter(p -> p.getStatus() == ProjectStatus.OPEN).count());
+        model.addAttribute("inProgressCount",
+                projects.stream().filter(p -> p.getStatus() == ProjectStatus.IN_PROGRESS).count());
+        model.addAttribute("completedCount",
+                projects.stream().filter(p -> p.getStatus() == ProjectStatus.COMPLETED).count());
+        return "client/dashboard";
+    }
+
+    @GetMapping("/post-project")
+    public String postProjectPage(Authentication auth, Model model) {
+        model.addAttribute("user", getCurrentUser(auth));
+        model.addAttribute("project", new Project());
+        return "client/post-project";
+    }
+
+    @PostMapping("/post-project")
+    public String postProject(@ModelAttribute Project project, Authentication auth,
+            RedirectAttributes redirectAttrs) {
+        User client = getCurrentUser(auth);
+        project.setClient(client);
+        project.setStatus(ProjectStatus.OPEN);
+        projectService.createProject(project);
+        redirectAttrs.addFlashAttribute("success", "Project posted successfully!");
+        return "redirect:/client/dashboard";
+    }
+
+    @GetMapping("/project/{id}")
+    public String viewProject(@PathVariable Long id, Authentication auth, Model model) {
+        Project project = projectService.findById(id).orElseThrow();
+        List<Bid> bids = bidService.findByProject(project);
+        model.addAttribute("user", getCurrentUser(auth));
+        model.addAttribute("project", project);
+        model.addAttribute("bids", bids);
+        model.addAttribute("milestones", milestoneService.findByProject(project));
+        return "client/project-detail";
+    }
+
+    @PostMapping("/project/{projectId}/accept-bid/{bidId}")
+    public String acceptBid(@PathVariable Long projectId, @PathVariable Long bidId,
+            Authentication auth, RedirectAttributes redirectAttrs) {
+        Bid bid = bidService.findById(bidId).orElseThrow();
+        projectService.assignFreelancer(projectId, bid.getFreelancer());
+        redirectAttrs.addFlashAttribute("success", "Bid accepted! Project is now in progress.");
+        return "redirect:/client/project/" + projectId;
+    }
+
+    @GetMapping("/project/{projectId}/add-milestone")
+    public String addMilestonePage(@PathVariable Long projectId, Authentication auth, Model model) {
+        model.addAttribute("user", getCurrentUser(auth));
+        model.addAttribute("project", projectService.findById(projectId).orElseThrow());
+        model.addAttribute("milestone", new Milestone());
+        return "client/add-milestone";
+    }
+
+    @PostMapping("/project/{projectId}/add-milestone")
+    public String addMilestone(@PathVariable Long projectId, @ModelAttribute Milestone milestone,
+            RedirectAttributes redirectAttrs) {
+        Project project = projectService.findById(projectId).orElseThrow();
+        milestone.setProject(project);
+        milestoneService.createMilestone(milestone);
+        redirectAttrs.addFlashAttribute("success", "Milestone added!");
+        return "redirect:/client/project/" + projectId;
+    }
+
+    @PostMapping("/milestone/{id}/approve")
+    public String approveMilestone(@PathVariable Long id, RedirectAttributes redirectAttrs) {
+        Milestone m = milestoneService.findById(id).orElseThrow();
+        milestoneService.approveMilestone(id);
+        redirectAttrs.addFlashAttribute("success", "Milestone approved and payment released!");
+        return "redirect:/client/project/" + m.getProject().getId();
+    }
+
+    @PostMapping("/milestone/{id}/reject")
+    public String rejectMilestone(@PathVariable Long id, @RequestParam String feedback,
+            RedirectAttributes redirectAttrs) {
+        Milestone m = milestoneService.findById(id).orElseThrow();
+        milestoneService.rejectMilestone(id, feedback);
+        redirectAttrs.addFlashAttribute("error", "Milestone rejected.");
+        return "redirect:/client/project/" + m.getProject().getId();
+    }
+
+    @GetMapping("/wallet")
+    public String wallet(Authentication auth, Model model) {
+        User user = getCurrentUser(auth);
+        model.addAttribute("user", user);
+        return "client/wallet";
+    }
+
+    @PostMapping("/wallet/add")
+    public String addWallet(@RequestParam BigDecimal amount, Authentication auth,
+            RedirectAttributes redirectAttrs) {
+        User user = getCurrentUser(auth);
+        userService.addToWallet(user, amount, "Wallet top-up");
+        redirectAttrs.addFlashAttribute("success", "₹" + amount + " added to wallet!");
+        return "redirect:/client/wallet";
+    }
+}

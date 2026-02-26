@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${project.title + ' | Talentrox'}">Project | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/freelancer-sidebar :: freelancer-sidebar}"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <a href="/freelancer/browse" class="text-muted text-sm"
+                    style="display:inline-flex;align-items:center;gap:4px;margin-bottom:8px;">← Back to Projects</a>
+                <h1 class="page-title" th:text="${project.title}">Project Title</h1>
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="project-badge badge-open">🟢 Open for Bids</span>
+                    <span class="text-muted text-sm" th:text="${project.category}">Category</span>
+                </div>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success">✅ <span th:text="${success}"></span></div>
+            <div th:if="${error}" class="alert alert-error">⚠️ <span th:text="${error}"></span></div>
+
+            <div class="grid" style="grid-template-columns:2fr 1fr; gap:1.5rem;">
+                <!-- Project info -->
+                <div>
+                    <div class="card mb-3">
+                        <div class="card-header">📄 Project Description</div>
+                        <div class="card-body">
+                            <p style="color:var(--text-secondary); line-height:1.8;" th:text="${project.description}">
+                                Description</p>
+                            <div class="divider"></div>
+                            <div class="grid grid-2" style="gap:1rem;">
+                                <div>
+                                    <div class="text-muted text-xs mb-1">BUDGET</div>
+                                    <div class="font-bold" style="color:var(--secondary);">₹<span
+                                            th:text="${#numbers.formatDecimal(project.budgetMin, 1, 0)}">0</span> –
+                                        ₹<span th:text="${#numbers.formatDecimal(project.budgetMax, 1, 0)}">0</span>
+                                    </div>
+                                </div>
+                                <div th:if="${project.deadline}">
+                                    <div class="text-muted text-xs mb-1">DEADLINE</div>
+                                    <div class="font-bold"
+                                        th:text="${#temporals.format(project.deadline, 'dd MMM yyyy')}">Date</div>
+                                </div>
+                                <div th:if="${project.skillsRequired}">
+                                    <div class="text-muted text-xs mb-1">REQUIRED SKILLS</div>
+                                    <div class="flex flex-wrap gap-1">
+                                        <span th:each="skill : ${project.skillsRequired.split(',')}"
+                                            style="background:rgba(108,99,255,0.12); color:var(--primary-light); padding:3px 10px; border-radius:100px; font-size:0.75rem; font-weight:500;"
+                                            th:text="${skill.trim()}">Skill</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-muted text-xs mb-1">POSTED BY</div>
+                                    <div class="flex items-center gap-2">
+                                        <div class="avatar" style="width:28px;height:28px;font-size:0.78rem;"
+                                            th:text="${project.client.fullName != null ? project.client.fullName.substring(0,1) : 'C'}">
+                                            C</div>
+                                        <span class="text-sm font-semibold"
+                                            th:text="${project.client.fullName != null ? project.client.fullName : project.client.username}">Client</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bid Form -->
+                <div>
+                    <div class="card" th:if="${!alreadyBid}">
+                        <div class="card-header">💼 Submit Your Bid</div>
+                        <div class="card-body">
+                            <form th:action="@{/freelancer/project/{id}/bid(id=${project.id})}" method="post">
+                                <div class="form-group">
+                                    <label class="form-label">Your Bid Amount (₹) *</label>
+                                    <input type="number" name="bidAmount" class="form-control"
+                                        placeholder="Enter amount" min="1" required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Delivery Days *</label>
+                                    <input type="number" name="deliveryDays" class="form-control"
+                                        placeholder="Days needed" min="1" required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Your Proposal *</label>
+                                    <textarea name="proposal" class="form-control" rows="5"
+                                        placeholder="Describe your approach, why you're the best fit, and your relevant experience..."
+                                        required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Demo Work URL <span class="text-muted text-xs">(GitHub,
+                                            Dribbble, live link...)</span></label>
+                                    <input type="url" name="demoWorkUrl" class="form-control"
+                                        placeholder="https://github.com/yourproject" />
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="width:100%;">Submit Bid 🚀</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card" th:if="${alreadyBid}">
+                        <div class="card-body text-center" style="padding:2rem;">
+                            <div style="font-size:3rem; margin-bottom:0.75rem;">✅</div>
+                            <h3 style="margin-bottom:0.5rem;">Bid Submitted!</h3>
+                            <p class="text-secondary-color text-sm">You've already submitted a bid for this project. The
+                                client will review it soon.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

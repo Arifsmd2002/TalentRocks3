@@ -1,0 +1,48 @@
+<!-- CLIENT SIDEBAR FRAGMENT -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <div th:fragment="client-sidebar" class="sidebar">
+        <a href="/" class="sidebar-brand">
+            <div class="logo-icon">⚡</div>
+            Talentrox
+        </a>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Main</div>
+            <a th:href="@{/client/dashboard}" class="sidebar-link"
+                th:classappend="${currentPage == 'dashboard' ? 'active' : ''}">
+                <span class="icon">📊</span> Dashboard
+            </a>
+            <a th:href="@{/client/post-project}" class="sidebar-link"
+                th:classappend="${currentPage == 'post-project' ? 'active' : ''}">
+                <span class="icon">➕</span> Post Project
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">Finance</div>
+            <a th:href="@{/client/wallet}" class="sidebar-link"
+                th:classappend="${currentPage == 'wallet' ? 'active' : ''}">
+                <span class="icon">💰</span> Wallet
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="flex items-center gap-2" style="margin-bottom:12px;">
+                <div class="avatar"
+                    th:text="${user != null and user.fullName != null ? user.fullName.substring(0,1).toUpperCase() : 'U'}">
+                    U</div>
+                <div>
+                    <div style="font-size:0.9rem; font-weight:600;" th:text="${user != null ? user.fullName : 'User'}">
+                        User</div>
+                    <div class="text-muted text-xs">Client</div>
+                </div>
+            </div>
+            <a href="/logout" class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;">Sign Out</a>
+        </div>
+    </div>
+</body>
+
+</html>

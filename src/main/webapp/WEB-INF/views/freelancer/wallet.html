@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wallet | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/freelancer-sidebar :: freelancer-sidebar}"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Earnings & Wallet 💰</h1>
+                <p class="page-subtitle">Track your earnings and payment history</p>
+            </div>
+
+            <div class="grid grid-2 mb-4">
+                <div class="wallet-box">
+                    <div class="wallet-label">💰 Total Earnings</div>
+                    <div class="wallet-amount">₹<span
+                            th:text="${#numbers.formatDecimal(user.walletBalance, 1, 2)}">0.00</span></div>
+                    <div class="text-sm mt-2" style="opacity:0.75;">After 5% Talentrox commission deduction</div>
+                </div>
+                <div class="card">
+                    <div class="card-body flex-center" style="flex-direction:column; gap:0.5rem; height:100%;">
+                        <div style="font-size:3rem;">📦</div>
+                        <div style="font-weight:700; font-size:1.2rem;"
+                            th:text="${user.completedProjects != null ? user.completedProjects : 0}">0</div>
+                        <div class="text-muted text-sm">Completed Projects</div>
+                        <div style="color:var(--primary-light); font-size:0.85rem; margin-top:0.5rem;">Performance:
+                            <span
+                                th:text="${user.performanceScore != null ? user.performanceScore + '/10' : '5.0/10'}">5.0/10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body text-center" style="padding:3rem; color:var(--text-muted);">
+                    <div style="font-size:3rem; margin-bottom:1rem;">📊</div>
+                    <p>Complete milestones to earn payments. Earnings will appear here automatically when clients
+                        approve your milestones.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

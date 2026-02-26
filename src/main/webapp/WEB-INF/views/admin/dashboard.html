@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Admin Sidebar -->
+        <div class="sidebar">
+            <a href="/" class="sidebar-brand">
+                <div class="logo-icon">⚡</div>
+                Talentrox
+            </a>
+            <div class="sidebar-section">
+                <div class="sidebar-label">Admin Panel</div>
+                <a href="/admin/dashboard" class="sidebar-link active"><span class="icon">📊</span> Dashboard</a>
+                <a href="/admin/users" class="sidebar-link"><span class="icon">👥</span> Manage Users</a>
+                <a href="/admin/projects" class="sidebar-link"><span class="icon">📋</span> All Projects</a>
+            </div>
+            <div class="sidebar-footer">
+                <div class="flex items-center gap-2" style="margin-bottom:12px;">
+                    <div class="avatar"
+                        th:text="${user.fullName != null ? user.fullName.substring(0,1).toUpperCase() : 'A'}">A</div>
+                    <div>
+                        <div style="font-size:0.9rem; font-weight:600;"
+                            th:text="${user.fullName != null ? user.fullName : user.username}">Admin</div>
+                        <div class="text-muted text-xs" style="color:var(--error);">🛡️ Administrator</div>
+                    </div>
+                </div>
+                <a href="/logout" class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;">Sign Out</a>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Admin <span class="gradient-text">Analytics</span> Dashboard</h1>
+                <p class="page-subtitle">Platform overview and management controls</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-4 mb-4">
+                <div class="stat-card">
+                    <div class="stat-icon purple">👥</div>
+                    <div>
+                        <div class="stat-value" th:text="${totalUsers}">0</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon teal">💼</div>
+                    <div>
+                        <div class="stat-value" th:text="${totalClients}">0</div>
+                        <div class="stat-label">Clients</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold">🎨</div>
+                    <div>
+                        <div class="stat-value" th:text="${totalFreelancers}">0</div>
+                        <div class="stat-label">Freelancers</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">📂</div>
+                    <div>
+                        <div class="stat-value" th:text="${totalProjects}">0</div>
+                        <div class="stat-label">Total Projects</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second Row Stats -->
+            <div class="grid grid-2 mb-4">
+                <!-- Platform Health -->
+                <div class="card">
+                    <div class="card-header">🌡️ Platform Health</div>
+                    <div class="card-body">
+                        <div class="flex-between mb-3">
+                            <span class="text-secondary-color">Open Projects</span>
+                            <span class="font-bold" style="color:var(--success);" th:text="${openProjects}">0</span>
+                        </div>
+                        <div class="flex-between mb-3">
+                            <span class="text-secondary-color">Commission Rate</span>
+                            <span class="font-bold" style="color:var(--primary);">5%</span>
+                        </div>
+                        <div class="flex-between mb-3">
+                            <span class="text-secondary-color">Platform Status</span>
+                            <span class="project-badge badge-open">🟢 Live</span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="flex gap-2 mt-3">
+                            <a href="/admin/users" class="btn btn-ghost btn-sm">Manage Users</a>
+                            <a href="/admin/projects" class="btn btn-ghost btn-sm">View Projects</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats Ring -->
+                <div class="card">
+                    <div class="card-header">📊 User Distribution</div>
+                    <div class="card-body">
+                        <div style="margin-bottom:1rem;">
+                            <div class="flex-between mb-1">
+                                <span class="text-sm">Clients</span>
+                                <span class="text-sm font-bold"
+                                    th:text="${totalUsers > 0 ? #numbers.formatDecimal(totalClients * 100.0 / totalUsers, 1, 0) + '%' : '0%'}">0%</span>
+                            </div>
+                            <div
+                                style="height:8px; background:var(--bg-surface); border-radius:100px; overflow:hidden;">
+                                <div
+                                    th:style="${'width:' + (totalUsers > 0 ? totalClients * 100 / totalUsers : 0) + '%; height:100%; background:linear-gradient(90deg,var(--primary),var(--primary-light)); border-radius:100px;'}">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:1rem;">
+                            <div class="flex-between mb-1">
+                                <span class="text-sm">Freelancers</span>
+                                <span class="text-sm font-bold"
+                                    th:text="${totalUsers > 0 ? #numbers.formatDecimal(totalFreelancers * 100.0 / totalUsers, 1, 0) + '%' : '0%'}">0%</span>
+                            </div>
+                            <div
+                                style="height:8px; background:var(--bg-surface); border-radius:100px; overflow:hidden;">
+                                <div
+                                    th:style="${'width:' + (totalUsers > 0 ? totalFreelancers * 100 / totalUsers : 0) + '%; height:100%; background:linear-gradient(90deg,var(--secondary),var(--secondary-dark)); border-radius:100px;'}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Data -->
+            <div class="grid grid-2 mb-4">
+                <!-- Recent Projects -->
+                <div class="card">
+                    <div class="card-header flex-between">
+                        <span>📋 Recent Projects</span>
+                        <a href="/admin/projects" class="text-primary-color text-sm">View All →</a>
+                    </div>
+                    <div th:if="${recentProjects == null or recentProjects.isEmpty()}"
+                        style="padding:2rem; text-align:center; color:var(--text-muted);">No projects yet</div>
+                    <div class="table-wrapper" th:if="${recentProjects != null and !recentProjects.isEmpty()}">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Client</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${recentProjects}">
+                                    <td style="font-weight:500;" th:text="${p.title}">Title</td>
+                                    <td class="text-secondary-color text-sm"
+                                        th:text="${p.client.fullName != null ? p.client.fullName : p.client.username}">
+                                        Client</td>
+                                    <td>
+                                        <span th:switch="${p.status.name()}">
+                                            <span th:case="'OPEN'" class="project-badge badge-open">Open</span>
+                                            <span th:case="'IN_PROGRESS'"
+                                                class="project-badge badge-progress">Active</span>
+                                            <span th:case="'COMPLETED'"
+                                                class="project-badge badge-completed">Done</span>
+                                            <span th:case="*" class="project-badge badge-pending"
+                                                th:text="${p.status}">Status</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Users -->
+                <div class="card">
+                    <div class="card-header flex-between">
+                        <span>👥 Recent Users</span>
+                        <a href="/admin/users" class="text-primary-color text-sm">View All →</a>
+                    </div>
+                    <div th:if="${recentUsers == null or recentUsers.isEmpty()}"
+                        style="padding:2rem; text-align:center; color:var(--text-muted);">No users yet</div>
+                    <div class="table-wrapper" th:if="${recentUsers != null and !recentUsers.isEmpty()}">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Joined</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="u : ${recentUsers}">
+                                    <td>
+                                        <div class="flex items-center gap-2">
+                                            <div class="avatar" style="width:28px;height:28px;font-size:0.75rem;"
+                                                th:text="${u.fullName != null ? u.fullName.substring(0,1) : u.username.substring(0,1)}">
+                                                U</div>
+                                            <span class="font-semibold text-sm"
+                                                th:text="${u.fullName != null ? u.fullName : u.username}">User</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span th:switch="${u.role.name()}">
+                                            <span th:case="'CLIENT'" style="color:var(--primary);"
+                                                class="text-sm font-semibold">💼 Client</span>
+                                            <span th:case="'FREELANCER'" style="color:var(--secondary);"
+                                                class="text-sm font-semibold">🎨 Freelancer</span>
+                                            <span th:case="'ADMIN'" style="color:var(--error);"
+                                                class="text-sm font-semibold">🛡️ Admin</span>
+                                        </span>
+                                    </td>
+                                    <td class="text-muted text-sm"
+                                        th:text="${u.createdAt != null ? #temporals.format(u.createdAt, 'dd MMM') : '-'}">
+                                        Date</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

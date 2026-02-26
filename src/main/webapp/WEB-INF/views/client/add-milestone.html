@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Milestone | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/client-sidebar :: client-sidebar}"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <a th:href="@{/client/project/{id}(id=${project.id})}" class="text-muted text-sm"
+                    style="display:inline-flex;align-items:center;gap:4px;margin-bottom:8px;">← Back to Project</a>
+                <h1 class="page-title">Add Milestone 🎯</h1>
+                <p class="page-subtitle" th:text="'For project: ' + ${project.title}">Project Title</p>
+            </div>
+
+            <div style="max-width:600px;">
+                <div class="card animate-fade-up">
+                    <div class="card-body">
+                        <form th:action="@{/client/project/{id}/add-milestone(id=${project.id})}" method="post">
+                            <div class="form-group">
+                                <label class="form-label">Milestone Title *</label>
+                                <input type="text" name="title" class="form-control"
+                                    placeholder="e.g. Phase 1 - Design Mockups" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-control" rows="4"
+                                    placeholder="Describe what needs to be delivered in this milestone..."></textarea>
+                            </div>
+                            <div class="grid grid-2" style="gap:1rem;">
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Payment Amount (₹)</label>
+                                    <input type="number" name="amount" class="form-control" placeholder="10000"
+                                        min="0" />
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Due Date</label>
+                                    <input type="date" name="dueDate" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">Add Milestone ✓</button>
+                                <a th:href="@{/client/project/{id}(id=${project.id})}" class="btn btn-ghost">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

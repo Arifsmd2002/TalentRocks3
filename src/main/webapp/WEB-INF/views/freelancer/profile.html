@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile | Talentrox</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+        <div th:replace="~{fragments/freelancer-sidebar :: freelancer-sidebar}"></div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">My Profile 👤</h1>
+                <p class="page-subtitle">Your public freelancer profile visible to clients</p>
+            </div>
+
+            <div th:if="${success}" class="alert alert-success">✅ <span th:text="${success}"></span></div>
+
+            <div class="grid" style="grid-template-columns:1fr 2fr; gap:1.5rem;">
+                <!-- Profile Card -->
+                <div class="card" style="height:fit-content;">
+                    <div class="card-body text-center">
+                        <div class="avatar avatar-xl" style="margin:0 auto 1rem;"
+                            th:text="${user.fullName != null ? user.fullName.substring(0,1).toUpperCase() : 'F'}">F
+                        </div>
+                        <h2 style="font-size:1.3rem; margin-bottom:0.25rem;"
+                            th:text="${user.fullName != null ? user.fullName : user.username}">Full Name</h2>
+                        <p class="text-muted text-sm mb-3" th:text="${user.email}">email@example.com</p>
+                        <div class="flex-center gap-2 mb-3">
+                            <span
+                                style="background:rgba(108,99,255,0.12); color:var(--primary); padding:4px 14px; border-radius:100px; font-size:0.8rem; font-weight:600;">Freelancer</span>
+                            <span th:if="${user.isVerified}"
+                                style="background:rgba(74,222,128,0.12); color:var(--success); padding:4px 14px; border-radius:100px; font-size:0.8rem; font-weight:600;">✓
+                                Verified</span>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="flex-between mb-2">
+                            <span class="text-muted text-sm">Performance Score</span>
+                            <span class="font-bold text-primary-color"
+                                th:text="${user.performanceScore != null ? user.performanceScore + '/10' : '5.0/10'}">5.0/10</span>
+                        </div>
+                        <div class="flex-between mb-2">
+                            <span class="text-muted text-sm">Completed</span>
+                            <span class="font-bold"
+                                th:text="${(user.completedProjects != null ? user.completedProjects : 0) + ' projects'}">0
+                                projects</span>
+                        </div>
+                        <div class="flex-between">
+                            <span class="text-muted text-sm">Wallet</span>
+                            <span class="font-bold" style="color:var(--secondary);">₹<span
+                                    th:text="${#numbers.formatDecimal(user.walletBalance, 1, 0)}">0</span></span>
+                        </div>
+
+                        <div class="divider"></div>
+                        <div th:if="${user.location}" class="text-secondary-color text-sm mb-1">📍 <span
+                                th:text="${user.location}">Location</span></div>
+                        <div th:if="${user.phone}" class="text-secondary-color text-sm">📞 <span
+                                th:text="${user.phone}">Phone</span></div>
+                    </div>
+                </div>
+
+                <!-- Edit Form -->
+                <div class="card">
+                    <div class="card-header">✏️ Edit Profile</div>
+                    <div class="card-body">
+                        <form th:action="@{/freelancer/profile/update}" method="post">
+                            <div class="grid grid-2" style="gap:1rem;">
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" name="fullName" class="form-control" th:value="${user.fullName}"
+                                        placeholder="Your full name" />
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" name="phone" class="form-control" th:value="${user.phone}"
+                                        placeholder="+91 9876543210" />
+                                </div>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" name="location" class="form-control" th:value="${user.location}"
+                                    placeholder="e.g. Mumbai, India" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Skills <span
+                                        class="text-muted text-xs">(comma-separated)</span></label>
+                                <input type="text" name="skills" class="form-control" th:value="${user.skills}"
+                                    placeholder="React, Node.js, Figma, Python..." />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bio / About You</label>
+                                <textarea name="bio" class="form-control" rows="5" th:text="${user.bio}"
+                                    placeholder="Tell clients about your experience, specialties, and what makes you unique..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Changes ✓</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>
