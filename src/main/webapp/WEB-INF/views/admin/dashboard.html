@@ -23,6 +23,12 @@
                 <a href="/admin/dashboard" class="sidebar-link active"><span class="icon">📊</span> Dashboard</a>
                 <a href="/admin/users" class="sidebar-link"><span class="icon">👥</span> Manage Users</a>
                 <a href="/admin/projects" class="sidebar-link"><span class="icon">📋</span> All Projects</a>
+                <a href="/admin/subscriptions" class="sidebar-link"><span class="icon">💳</span> Subscriptions</a>
+                <a href="/admin/messages" class="sidebar-link" style="position:relative;">
+                    <span class="icon">📬</span> Messages
+                    <span th:if="${unreadMessages != null and unreadMessages > 0}" th:text="${unreadMessages}"
+                        style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:#ef4444;color:#fff;border-radius:999px;font-size:0.68rem;font-weight:700;padding:0.1rem 0.45rem;min-width:18px;text-align:center;"></span>
+                </a>
             </div>
             <div class="sidebar-footer">
                 <div class="flex items-center gap-2" style="margin-bottom:12px;">
@@ -72,6 +78,40 @@
                     <div>
                         <div class="stat-value" th:text="${totalProjects}">0</div>
                         <div class="stat-label">Total Projects</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscription Stats -->
+            <div class="grid grid-4 mb-4">
+                <div class="stat-card">
+                    <div class="stat-icon purple">💳</div>
+                    <div>
+                        <div class="stat-value" th:text="${activeSubscriptions != null ? activeSubscriptions : 0}">0
+                        </div>
+                        <div class="stat-label">Active Subscriptions</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">💰</div>
+                    <div>
+                        <div class="stat-value" th:text="${monthlyRevenue != null ? '₹' + monthlyRevenue : '₹0'}">₹0
+                        </div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon teal">🚀</div>
+                    <div>
+                        <div class="stat-value" th:text="${growthCount != null ? growthCount : 0}">0</div>
+                        <div class="stat-label">Growth Plans</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold">👑</div>
+                    <div>
+                        <div class="stat-value" th:text="${eliteCount != null ? eliteCount : 0}">0</div>
+                        <div class="stat-label">Elite Plans</div>
                     </div>
                 </div>
             </div>
@@ -227,6 +267,8 @@
             </div>
         </main>
     </div>
+
+
 </body>
 
 </html>

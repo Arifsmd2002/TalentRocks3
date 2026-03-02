@@ -26,6 +26,7 @@
             <li><a href="/" class="nav-link active">Home</a></li>
             <li><a href="/freelancer/browse" class="nav-link" sec:authorize="hasRole('FREELANCER')">Browse Jobs</a></li>
             <li><a href="/about" class="nav-link">About</a></li>
+            <li><a href="/pricing" class="nav-link">Pricing</a></li>
             <li sec:authorize="isAnonymous()"><a href="/login" class="nav-link">Login</a></li>
             <li sec:authorize="isAnonymous()"><a href="/register" class="btn btn-primary btn-sm"
                     style="margin-left:8px">Get Started</a></li>
@@ -39,10 +40,8 @@
     <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-bg" id="hero-bg-container">
-            <!-- Semi-transparent overlay to ensure UI readability -->
+            <!-- The rotator script will dynamically inject the iframe here -->
             <div class="hero-overlay"></div>
-            <!-- YouTube Iframe Container -->
-            <div id="yt-bg-player"></div>
         </div>
         <div class="hero-content animate-fade">
             <div class="hero-badge">
@@ -263,87 +262,87 @@
     <!-- FOOTER -->
     <div th:replace="~{fragments/footer :: footer}"></div>
 
-    <!-- YOUTUBE BACKGROUND VIDEO SCRIPT -->
+    <!-- ============================================================
+         BACKGROUND VIDEO ROTATOR — 4 High-Quality Tech/3D Loops
+         Curated: 3D Workspace, Digital Globe, Tech City, Real-Life AI Hub
+         ============================================================ -->
+    <style>
+        #hero-bg-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+            background: #0a0b0f;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(10, 11, 15, 0.7), rgba(10, 11, 15, 0.5), rgba(10, 11, 15, 0.8));
+            z-index: 1;
+        }
+
+        #bg-video-iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 56.25vw;
+            /* 16:9 ratio */
+            min-height: 100vh;
+            min-width: 177.77vh;
+            /* 16:9 ratio inverted */
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        #bg-video-iframe.visible {
+            opacity: 1;
+        }
+    </style>
+
     <script>
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        (function () {
+            /* 4 Curated IDs: 1. 3D Office, 2. Digital Earth, 3. Future City, 4. Tech Workshop */
+            const videoIds = ['_771r9v5xQk', 'O_pT9766iAc', 'JcWvX90E_Yw', 'l-n3rXjE3iM'];
+            let currentIdx = 0;
+            const DURATION = 8000; // 8 seconds per clip
+            const container = document.getElementById('hero-bg-container');
 
-        var player;
-        // Expanded selection of 10 breathtaking 4K nature and drone aerial loops
-        var videoList = [
-            'yYyGjB-1wJk', // Famous Landscapes
-            'JcWvX90E_Yw', // Amazing Nature Drone
-            'zRpazyH1WzI', // 4K Drone Stock
-            '0kYv_3jV3pA', // Limitless Inspiration
-            'CxS62Yc9iIk', // Nature Relaxation / Ocean
-            '7q_S0mD-vjU', // Mountains and Lakes
-            'eG4Yl387t1U', // Breathtaking Drone views
-            '--CqUrPL_ds', // Coastal / Scenic Film
-            'Xv0A88mNl-4', // Iceland Drone views
-            'UvUuGueM0uE'  // River / Valley Aerial
-        ];
-        var currentVideoIndex = 0;
-        var rotateInterval;
+            /* Create the Iframe */
+            const iframe = document.createElement('iframe');
+            iframe.id = 'bg-video-iframe';
+            iframe.frameBorder = '0';
+            iframe.allow = 'autoplay; encrypted-media';
+            container.appendChild(iframe);
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-bg-player', {
-                videoId: videoList[currentVideoIndex],
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 0,
-                    'rel': 0,
-                    'showinfo': 0,
-                    'modestbranding': 1,
-                    'mute': 1,
-                    'loop': 0,
-                    'playsinline': 1,
-                    'disablekb': 1,
-                    'iv_load_policy': 3
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange,
-                    'onError': onPlayerError // ADDED ERROR HANDLING
-                }
-            });
-        }
+            function loadVideo(id) {
+                iframe.classList.remove('visible');
 
-        function onPlayerReady(event) {
-            event.target.playVideo();
-            startRotation();
-        }
+                /* Construct URL with parameters for clean background loop */
+                const baseUrl = "https://www.youtube.com/embed/" + id;
+                const params = "?autoplay=1&mute=1&controls=0&loop=1&playlist=" + id + "&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&enablejsapi=1";
 
-        function startRotation() {
-            if (rotateInterval) clearInterval(rotateInterval);
-            rotateInterval = setInterval(nextVideo, 5000); // 5 seconds interval
-        }
-
-        function nextVideo() {
-            currentVideoIndex = (currentVideoIndex + 1) % videoList.length;
-            if (player && player.loadVideoById) {
-                // Simplified call for fastest execution
-                player.loadVideoById(videoList[currentVideoIndex]);
-                player.mute();
-                player.playVideo();
+                /* Small delay before changing src to allow transition out */
+                setTimeout(() => {
+                    iframe.src = baseUrl + params;
+                    /* Fade in after load starts */
+                    setTimeout(() => iframe.classList.add('visible'), 1000);
+                }, 500);
             }
-        }
 
-        function onPlayerStateChange(event) {
-            // If video ends naturally before the 5s timer, skip to next
-            if (event.data === YT.PlayerState.ENDED) {
-                nextVideo();
-                startRotation();
-            }
-        }
+            /* Initial Load */
+            loadVideo(videoIds[currentIdx]);
 
-        // AUTO-SKIP IF VIDEO IS UNAVAILABLE
-        function onPlayerError(event) {
-            console.log("Video unavailable, skipping to next...");
-            nextVideo();
-            startRotation();
-        }
+            /* Rotation Logic */
+            setInterval(() => {
+                currentIdx = (currentIdx + 1) % videoIds.length;
+                loadVideo(videoIds[currentIdx]);
+            }, DURATION);
+        })();
     </script>
 </body>
 

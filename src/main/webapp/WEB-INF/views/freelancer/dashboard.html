@@ -177,6 +177,110 @@
             </div>
         </main>
     </div>
+
+    <!-- ============================================================
+         NOTIFICATION BELL (Freelancer)
+         ============================================================ -->
+    <div id="notif-bell-wrap" style="position:fixed;top:1rem;right:1.5rem;z-index:8888;">
+        <button id="notif-bell-btn" onclick="toggleNotifDropdown()"
+            style="position:relative;width:44px;height:44px;border-radius:50%;background:rgba(15,22,40,0.9);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:all 0.2s;box-shadow:0 4px 20px rgba(0,0,0,0.3);"
+            title="Notifications">
+            🔔
+            <span id="notif-badge"
+                style="display:none;position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;border-radius:999px;font-size:0.65rem;font-weight:800;padding:0.1rem 0.38rem;min-width:17px;text-align:center;line-height:1.4;border:2px solid #050b18;"></span>
+        </button>
+
+        <!-- Dropdown panel -->
+        <div id="notif-dropdown"
+            style="display:none;position:absolute;right:0;top:54px;width:340px;max-height:480px;overflow-y:auto;background:#0d1425;border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.5);backdrop-filter:blur(12px);">
+            <div
+                style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.07);">
+                <span style="font-weight:700;font-size:0.95rem;color:#fff;">🔔 Notifications</span>
+                <button onclick="markAllRead()"
+                    style="background:none;border:none;color:#818cf8;font-size:0.78rem;font-weight:600;cursor:pointer;padding:0;">Mark
+                    all read</button>
+            </div>
+            <div id="notif-list" style="padding:0.5rem 0;"></div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            let isOpen = false;
+
+            // Close on outside click
+            document.addEventListener('click', function (e) {
+                if (isOpen && !document.getElementById('notif-bell-wrap').contains(e.target)) {
+                    document.getElementById('notif-dropdown').style.display = 'none';
+                    isOpen = false;
+                }
+            });
+
+            function fetchCount() {
+                fetch('/notifications/count', { credentials: 'same-origin' })
+                    .then(r => r.json())
+                    .then(data => {
+                        const badge = document.getElementById('notif-badge');
+                        if (data.count > 0) {
+                            badge.textContent = data.count > 99 ? '99+' : data.count;
+                            badge.style.display = 'block';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }).catch(() => { });
+            }
+
+            window.toggleNotifDropdown = function () {
+                isOpen = !isOpen;
+                const dd = document.getElementById('notif-dropdown');
+                dd.style.display = isOpen ? 'block' : 'none';
+                if (isOpen) loadNotifications();
+            };
+
+            window.loadNotifications = function () {
+                fetch('/notifications/list', { credentials: 'same-origin' })
+                    .then(r => r.json())
+                    .then(items => {
+                        const list = document.getElementById('notif-list');
+                        if (!items.length) {
+                            list.innerHTML = '<div style="padding:2rem;text-align:center;color:rgba(255,255,255,0.35);font-size:0.88rem;">No notifications yet 🎉</div>';
+                            return;
+                        }
+                        list.innerHTML = items.map(n => `
+                        <a href="${n.link}" onclick="markRead(${n.id})"
+                           style="display:block;padding:0.85rem 1.25rem;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.15s;${!n.isRead ? 'border-left:3px solid #6366f1;' : 'border-left:3px solid transparent;'}">
+                            <div style="font-size:0.88rem;font-weight:${n.isRead ? '500' : '700'};color:${n.isRead ? 'rgba(255,255,255,0.55)' : '#fff'};margin-bottom:0.2rem;">${n.title}</div>
+                            <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:0.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.message}</div>
+                            <div style="font-size:0.7rem;color:rgba(255,255,255,0.25);">${n.time}</div>
+                        </a>
+                    `).join('');
+                    }).catch(() => { });
+            };
+
+            window.markRead = function (id) {
+                fetch('/notifications/' + id + '/read', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                }).then(() => fetchCount()).catch(() => { });
+            };
+
+            window.markAllRead = function () {
+                fetch('/notifications/mark-all-read', {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                }).then(() => {
+                    fetchCount();
+                    loadNotifications();
+                }).catch(() => { });
+            };
+
+            // Initial fetch + poll every 30s
+            fetchCount();
+            setInterval(fetchCount, 30000);
+        })();
+    </script>
 </body>
 
 </html>

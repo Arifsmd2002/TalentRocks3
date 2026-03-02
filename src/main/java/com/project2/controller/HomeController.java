@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
@@ -13,10 +14,13 @@ public class HomeController {
 
     private final UserService userService;
     private final ProjectService projectService;
+    private final NotificationService notificationService;
 
-    public HomeController(UserService userService, ProjectService projectService) {
+    public HomeController(UserService userService, ProjectService projectService,
+            NotificationService notificationService) {
         this.userService = userService;
         this.projectService = projectService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/")
@@ -53,6 +57,32 @@ public class HomeController {
     @GetMapping("/contact")
     public String contact() {
         return "contact";
+    }
+
+    @PostMapping("/contact/send")
+    public String sendContact(@RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String message,
+            RedirectAttributes redirectAttrs) {
+        try {
+            if (name.isBlank() || email.isBlank() || message.isBlank()) {
+                redirectAttrs.addFlashAttribute("error", "All fields are required.");
+                return "redirect:/contact";
+            }
+            notificationService.saveContactMessage(name.trim(), email.trim(), message.trim());
+            notificationService.notifyAdminsContactMessage(name.trim(), email.trim(), null);
+            redirectAttrs.addFlashAttribute("success",
+                    "✅ Message sent! We'll get back to you at " + email + " soon.");
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error",
+                    "Something went wrong. Please try again.");
+        }
+        return "redirect:/contact";
+    }
+
+    @GetMapping("/pricing")
+    public String pricing() {
+        return "pricing";
     }
 
     @GetMapping("/dashboard")

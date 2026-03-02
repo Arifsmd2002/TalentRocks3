@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscriptions | Admin — Talentrock</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <div class="app-layout">
+
+        <!-- Admin Sidebar -->
+        <div class="sidebar">
+            <a href="/" class="sidebar-brand">
+                <div class="logo-icon">⚡</div> Talentrock
+            </a>
+            <div class="sidebar-section">
+                <div class="sidebar-label">Admin Panel</div>
+                <a href="/admin/dashboard" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+                <a href="/admin/users" class="sidebar-link"><span class="icon">👥</span> Manage Users</a>
+                <a href="/admin/projects" class="sidebar-link"><span class="icon">📋</span> All Projects</a>
+                <a href="/admin/subscriptions" class="sidebar-link active"><span class="icon">💳</span>
+                    Subscriptions</a>
+            </div>
+            <div class="sidebar-footer">
+                <div class="flex items-center gap-2" style="margin-bottom:12px;">
+                    <div class="avatar"
+                        th:text="${user.fullName != null ? user.fullName.substring(0,1).toUpperCase() : 'A'}">A</div>
+                    <div>
+                        <div style="font-size:0.9rem;font-weight:600;"
+                            th:text="${user.fullName != null ? user.fullName : user.username}">Admin</div>
+                        <div class="text-muted text-xs" style="color:var(--error);">🛡️ Administrator</div>
+                    </div>
+                </div>
+                <a href="/logout" class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;">Sign Out</a>
+            </div>
+        </div>
+
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">💳 Subscription <span class="gradient-text">Overview</span></h1>
+                <p class="page-subtitle">All freelancer subscription plans, revenue, and analytics</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-4 mb-4">
+                <div class="stat-card">
+                    <div class="stat-icon purple">💳</div>
+                    <div>
+                        <div class="stat-value" th:text="${activeSubscriptions}">0</div>
+                        <div class="stat-label">Active Plans</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">💰</div>
+                    <div>
+                        <div class="stat-value" th:text="${'₹' + monthlyRevenue}">₹0</div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon teal">🚀</div>
+                    <div>
+                        <div class="stat-value" th:text="${growthCount + proCount}">0</div>
+                        <div class="stat-label">Growth + Pro Plans</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold">👑</div>
+                    <div>
+                        <div class="stat-value" th:text="${eliteCount}">0</div>
+                        <div class="stat-label">Elite Plans</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subscriptions Table -->
+            <div class="card mb-4">
+                <div class="card-header flex-between">
+                    <span>📋 All Subscriptions</span>
+                    <span th:text="${subscriptions.size() + ' total'}" class="text-muted text-sm">0 total</span>
+                </div>
+                <div th:if="${subscriptions == null or subscriptions.isEmpty()}"
+                    style="padding:3rem;text-align:center;color:var(--text-muted);">No subscriptions yet</div>
+                <div class="table-wrapper" th:if="${subscriptions != null and !subscriptions.isEmpty()}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Plan</th>
+                                <th>Status</th>
+                                <th>Method</th>
+                                <th>Amount</th>
+                                <th>Start Date</th>
+                                <th>Next Billing</th>
+                                <th>Invoice</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="s : ${subscriptions}">
+                                <td style="font-weight:600;"
+                                    th:text="${s.user.fullName != null ? s.user.fullName : s.user.username}">User</td>
+                                <td>
+                                    <span th:switch="${s.plan.name()}">
+                                        <span th:case="'FREE'"
+                                            style="background:rgba(100,116,139,0.15);color:#94a3b8;border:1px solid rgba(100,116,139,0.2);padding:0.2rem 0.6rem;border-radius:999px;font-size:0.76rem;font-weight:700;">🆓
+                                            Free</span>
+                                        <span th:case="'GROWTH'"
+                                            style="background:rgba(6,182,212,0.12);color:#22d3ee;border:1px solid rgba(6,182,212,0.2);padding:0.2rem 0.6rem;border-radius:999px;font-size:0.76rem;font-weight:700;">🚀
+                                            Growth</span>
+                                        <span th:case="'PRO'"
+                                            style="background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.25);padding:0.2rem 0.6rem;border-radius:999px;font-size:0.76rem;font-weight:700;">⚡
+                                            Pro</span>
+                                        <span th:case="'ELITE'"
+                                            style="background:rgba(245,158,11,0.12);color:#fbbf24;border:1px solid rgba(245,158,11,0.2);padding:0.2rem 0.6rem;border-radius:999px;font-size:0.76rem;font-weight:700;">👑
+                                            Elite</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span th:switch="${s.status}">
+                                        <span th:case="'ACTIVE'" class="project-badge badge-open">● Active</span>
+                                        <span th:case="'CANCELLED'" class="project-badge badge-cancelled"
+                                            style="background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.2);">✕
+                                            Cancelled</span>
+                                        <span th:case="*" class="project-badge badge-pending"
+                                            th:text="${s.status}">Status</span>
+                                    </span>
+                                </td>
+                                <td class="text-secondary-color text-sm" th:text="${s.paymentMethod}">UPI</td>
+                                <td style="font-weight:600;color:var(--success);" th:text="${'₹' + s.amountPaid}">₹0
+                                </td>
+                                <td class="text-muted text-sm"
+                                    th:text="${s.startDate != null ? #temporals.format(s.startDate, 'dd MMM yyyy') : '-'}">
+                                    -</td>
+                                <td class="text-muted text-sm"
+                                    th:text="${s.nextBillingDate != null ? #temporals.format(s.nextBillingDate, 'dd MMM yyyy') : '-'}">
+                                    -</td>
+                                <td class="text-sm" th:text="${s.invoiceNumber}">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

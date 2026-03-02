@@ -20,13 +20,15 @@ public class ClientController {
     private final ProjectService projectService;
     private final BidService bidService;
     private final MilestoneService milestoneService;
+    private final NotificationService notificationService;
 
     public ClientController(UserService userService, ProjectService projectService, BidService bidService,
-            MilestoneService milestoneService) {
+            MilestoneService milestoneService, NotificationService notificationService) {
         this.userService = userService;
         this.projectService = projectService;
         this.bidService = bidService;
         this.milestoneService = milestoneService;
+        this.notificationService = notificationService;
     }
 
     private User getCurrentUser(Authentication auth) {
@@ -60,7 +62,9 @@ public class ClientController {
         User client = getCurrentUser(auth);
         project.setClient(client);
         project.setStatus(ProjectStatus.OPEN);
-        projectService.createProject(project);
+        Project saved = projectService.createProject(project);
+        // Notify skill-matched freelancers
+        notificationService.notifyMatchedFreelancers(saved);
         redirectAttrs.addFlashAttribute("success", "Project posted successfully!");
         return "redirect:/client/dashboard";
     }

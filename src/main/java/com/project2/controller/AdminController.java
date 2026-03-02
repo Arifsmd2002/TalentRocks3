@@ -15,10 +15,15 @@ public class AdminController {
 
     private final UserService userService;
     private final ProjectService projectService;
+    private final SubscriptionService subscriptionService;
+    private final NotificationService notificationService;
 
-    public AdminController(UserService userService, ProjectService projectService) {
+    public AdminController(UserService userService, ProjectService projectService,
+            SubscriptionService subscriptionService, NotificationService notificationService) {
         this.userService = userService;
         this.projectService = projectService;
+        this.subscriptionService = subscriptionService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/dashboard")
@@ -32,7 +37,27 @@ public class AdminController {
         model.addAttribute("recentProjects", projectService.findAllProjects().stream().limit(5).toList());
         model.addAttribute("recentUsers", userService.findAll().stream()
                 .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())).limit(5).toList());
+        // Subscription analytics
+        model.addAttribute("activeSubscriptions", subscriptionService.countActive());
+        model.addAttribute("monthlyRevenue", subscriptionService.monthlyRevenue());
+        model.addAttribute("growthCount", subscriptionService.countByPlan(SubscriptionPlan.GROWTH));
+        model.addAttribute("eliteCount", subscriptionService.countByPlan(SubscriptionPlan.ELITE));
+        // Unread contact messages badge
+        model.addAttribute("unreadMessages", notificationService.countUnreadContactMessages());
         return "admin/dashboard";
+    }
+
+    @GetMapping("/subscriptions")
+    public String subscriptions(Authentication auth, Model model) {
+        model.addAttribute("user", userService.findByUsername(auth.getName()).orElseThrow());
+        model.addAttribute("subscriptions", subscriptionService.findAll());
+        model.addAttribute("activeSubscriptions", subscriptionService.countActive());
+        model.addAttribute("cancelledCount", subscriptionService.countCancelled());
+        model.addAttribute("monthlyRevenue", subscriptionService.monthlyRevenue());
+        model.addAttribute("growthCount", subscriptionService.countByPlan(SubscriptionPlan.GROWTH));
+        model.addAttribute("proCount", subscriptionService.countByPlan(SubscriptionPlan.PRO));
+        model.addAttribute("eliteCount", subscriptionService.countByPlan(SubscriptionPlan.ELITE));
+        return "admin/subscriptions";
     }
 
     @GetMapping("/users")
@@ -47,6 +72,20 @@ public class AdminController {
         userService.toggleUserStatus(id);
         redirectAttrs.addFlashAttribute("success", "User status updated.");
         return "redirect:/admin/users";
+    }
+
+    @GetMapping("/messages")
+    public String messages(Authentication auth, Model model) {
+        model.addAttribute("user", userService.findByUsername(auth.getName()).orElseThrow());
+        model.addAttribute("messages", notificationService.getAllContactMessages());
+        model.addAttribute("unreadMessages", notificationService.countUnreadContactMessages());
+        return "admin/messages";
+    }
+
+    @PostMapping("/messages/{id}/read")
+    public String markMessageRead(@PathVariable Long id) {
+        notificationService.markContactMessageRead(id);
+        return "redirect:/admin/messages";
     }
 
     @GetMapping("/projects")

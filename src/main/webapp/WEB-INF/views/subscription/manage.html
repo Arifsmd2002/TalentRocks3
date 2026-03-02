@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Subscription | Talentrock</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #050b18;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .manage-wrap {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.87rem;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: #fff;
+        }
+
+        .manage-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.4rem;
+        }
+
+        .manage-sub {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Plan card */
+        .sub-card {
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: rgba(15, 22, 40, 0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .plan-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .pill-free {
+            background: rgba(100, 116, 139, 0.15);
+            color: #94a3b8;
+            border: 1px solid rgba(100, 116, 139, 0.25);
+        }
+
+        .pill-growth {
+            background: rgba(6, 182, 212, 0.12);
+            color: #22d3ee;
+            border: 1px solid rgba(6, 182, 212, 0.25);
+        }
+
+        .pill-pro {
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .pill-elite {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .status-cancelled {
+            background: rgba(239, 68, 68, 0.12);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media(max-width:500px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-item label {
+            font-size: 0.76rem;
+            color: rgba(255, 255, 255, 0.35);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item span {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.07);
+            margin: 1.5rem 0;
+        }
+
+        .autorenew-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .autorenew-row span {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .toggle-small {
+            position: relative;
+            width: 40px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .toggle-small input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .track {
+            position: absolute;
+            inset: 0;
+            background: rgba(99, 102, 241, 0.25);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 999px;
+            transition: background 0.25s;
+        }
+
+        .thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            background: #6366f1;
+            border-radius: 50%;
+            transition: transform 0.25s;
+        }
+
+        .toggle-small input:checked~.track {
+            background: rgba(99, 102, 241, 0.5);
+        }
+
+        .toggle-small input:checked~.thumb {
+            transform: translateX(18px);
+        }
+
+        .action-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-upgrade {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-upgrade:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: transparent;
+            color: rgba(239, 68, 68, 0.8);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            font-weight: 600;
+            font-size: 0.87rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(239, 68, 68, 0.08);
+            color: #f87171;
+        }
+
+        /* No subscription */
+        .no-sub {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .no-sub .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-sub h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .no-sub p {
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .btn-view-plans {
+            display: inline-block;
+            padding: 0.85rem 2rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-view-plans:hover {
+            opacity: 0.88;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="manage-wrap">
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+        <h1 class="manage-title">My Subscription</h1>
+        <p class="manage-sub">Manage your Talentrock freelancer plan</p>
+
+        <!-- ACTIVE SUBSCRIPTION -->
+        <div th:if="${subscription != null}">
+            <div class="sub-card">
+                <div class="plan-header">
+                    <span th:switch="${subscription.plan.name()}" class="plan-pill">
+                        <span th:case="'FREE'" class="plan-pill pill-free">🆓 Free Plan</span>
+                        <span th:case="'GROWTH'" class="plan-pill pill-growth">🚀 Growth Plan</span>
+                        <span th:case="'PRO'" class="plan-pill pill-pro">⚡ Pro Plan</span>
+                        <span th:case="'ELITE'" class="plan-pill pill-elite">👑 Elite Plan</span>
+                    </span>
+                    <span th:switch="${subscription.status}" class="status-badge">
+                        <span th:case="'ACTIVE'" class="status-badge status-active">● Active</span>
+                        <span th:case="'CANCELLED'" class="status-badge status-cancelled">✕ Cancelled</span>
+                        <span th:case="*" class="status-badge status-cancelled"
+                            th:text="${subscription.status}">Status</span>
+                    </span>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Monthly Price</label>
+                        <span>₹<span th:text="${subscription.plan.monthlyPrice}">0</span></span>
+                    </div>
+                    <div class="info-item">
+                        <label>Commission Rate</label>
+                        <span th:text="${(int)(subscription.plan.commissionRate * 100) + '%'}">5%</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Bid Limit / Month</label>
+                        <span
+                            th:text="${subscription.plan.monthlyBids == 2147483647 ? 'Unlimited' : subscription.plan.monthlyBids}">5</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Payment Method</label>
+                        <span th:text="${subscription.paymentMethod}">UPI</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Start Date</label>
+                        <span th:text="${#temporals.format(subscription.startDate, 'dd MMM yyyy')}">—</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Next Billing</label>
+                        <span th:text="${#temporals.format(subscription.nextBillingDate, 'dd MMM yyyy')}">—</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Invoice</label>
+                        <span th:text="${subscription.invoiceNumber}">—</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Transaction ID</label>
+                        <span th:text="${subscription.transactionId}">—</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="autorenew-row" style="margin-bottom:1.5rem;">
+                    <span>Auto-Renewal</span>
+                    <label class="toggle-small">
+                        <input type="checkbox" th:checked="${subscription.autoRenew}" disabled />
+                        <div class="track"></div>
+                        <div class="thumb"></div>
+                    </label>
+                </div>
+
+                <div class="action-row">
+                    <a href="/pricing" class="btn-upgrade">Upgrade Plan →</a>
+                    <form th:action="@{/subscription/cancel}" method="post" style="flex:1;">
+                        <button type="submit" class="btn-cancel" style="width:100%;"
+                            onclick="return confirm('Are you sure you want to cancel your subscription?')">
+                            Cancel Subscription
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- NO SUBSCRIPTION -->
+        <div th:if="${subscription == null}" class="sub-card no-sub">
+            <div class="icon">📦</div>
+            <h2>No Active Plan</h2>
+            <p>You're currently on the Free plan with 5 bids/month.<br>Upgrade to unlock more bids and premium features.
+            </p>
+            <a href="/pricing" class="btn-view-plans">View Pricing Plans →</a>
+        </div>
+    </div>
+</body>
+
+</html>
